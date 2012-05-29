@@ -2,7 +2,8 @@
 
 namespace Tests\Behat\Mink\Driver;
 
-use Behat\Mink\Driver\ZombieDriver;
+use Behat\Mink\Driver\ZombieDriver,
+    Behat\Mink\Driver\NodeJS\Server\ZombieServer;
 
 /**
  * @group zombiedriver
@@ -11,7 +12,9 @@ class ZombieDriverTest extends JavascriptDriverTest
 {
     protected static function getDriver()
     {
-        return new ZombieDriver();
+        $server = new ZombieServer('127.0.0.1', 8124, 'node');
+
+        return new ZombieDriver($server);
     }
 
     /**

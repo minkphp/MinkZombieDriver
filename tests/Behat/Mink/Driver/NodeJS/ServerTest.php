@@ -2,7 +2,6 @@
 
 namespace Tests\Behat\Mink\Driver\NodeJS;
 
-use Behat\Mink\PHPUnit\TestCase;
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server as BaseServer;
 
@@ -24,16 +23,8 @@ class TestServer extends BaseServer
     }
 }
 
-class ServerTest extends TestCase
+class ServerTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-    }
-
-    public function tearDown()
-    {
-    }
-
     public function testCreateServerWithDefaults()
     {
         $server = new TestServer();
