@@ -48,7 +48,7 @@ class ZombieDriverTest extends JavascriptDriverTest
     /**
      * @expectedException Behat\Mink\Exception\UnsupportedDriverActionException
      */
-    public function testOtherHttpHeader()
+    public function testNotAllowedHttpHeader()
     {
         $this->getSession()->setRequestHeader('foo', 'bar');
     }
