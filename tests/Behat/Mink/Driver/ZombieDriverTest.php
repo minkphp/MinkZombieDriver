@@ -37,4 +37,19 @@ class ZombieDriverTest extends JavascriptDriverTest
 
     // Zombie.js doesn't support window switching
     public function testWindow() {}
+
+    public function testSetUserAgent()
+    {
+        $this->getSession()->setRequestHeader('user-agent', 'foo bar');
+        $this->getSession()->visit($this->pathTo('/headers.php'));
+        $this->assertContains('foo bar', $this->getSession()->getPage()->getText());
+    }
+
+    /**
+     * @expectedException Behat\Mink\Exception\UnsupportedDriverActionException
+     */
+    public function testOtherHttpHeader()
+    {
+        $this->getSession()->setRequestHeader('foo', 'bar');
+    }
 }

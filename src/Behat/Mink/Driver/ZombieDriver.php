@@ -254,7 +254,12 @@ JS;
      */
     public function setRequestHeader($name, $value)
     {
-        throw new UnsupportedDriverActionException('Request headers manipulation is not supported by %s', $this);
+        if (strtolower($name) === 'user-agent') {
+            $this->server->evalJS("browser.userAgent = '$value';stream.end();");
+            return;
+        }
+
+        throw new UnsupportedDriverActionException('Request header "' . $name . '" manipulation is not supported by %s', $this);
     }
 
     /**
