@@ -294,7 +294,21 @@ JS;
      */
     public function getCookie($name)
     {
-        return $this->server->evalJS("browser.cookies(browser.window.location.hostname, '/').get('{$name}')", 'json');
+        $js = <<<JS
+var cookieVal = browser.cookies(browser.window.location.hostname, '/').get('{$name}');
+if (cookieVal) {
+    stream.end(unescape(cookieVal))
+} else {
+    stream.end();
+}
+JS;
+
+        $res = $this->server->evalJS($js);
+        if (empty($res)) {
+            return null;
+        }
+
+        return $res;
     }
 
     /**
