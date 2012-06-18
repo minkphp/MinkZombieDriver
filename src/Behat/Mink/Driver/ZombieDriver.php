@@ -801,11 +801,17 @@ JS;
      */
     public function wait($time, $condition)
     {
-        // Because of its nature, the Zombie.js browser only waits a long as there
-        // there are events in the event loop. As soon as it's empty, it calls
-        // the callback. So there's no need to wait for a specific time or
-        // condition
-        $this->server->evalJS("browser.wait(function() { stream.end(); });");
+        $js = <<<JS
+browser.waitFor = {$time};
+browser.wait(function(window) {
+    with(window) {
+        return {$condition};
+    }
+}, function() {
+    stream.end();
+});
+JS;
+        $this->server->evalJS($js);
     }
 
     /**
