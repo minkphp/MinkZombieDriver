@@ -1,0 +1,30 @@
+language: php
+
+php:
+ - 5.3
+ - 5.4
+
+before_script:
+ - export WEB_FIXTURES_HOST=http://localhost
+ - export WEB_FIXTURES_BROWSER=firefox
+
+ # Install deps
+ - curl -s http://getcomposer.org/installer | php
+ - php composer.phar install
+
+ - sudo apt-get install -y --force-yes apache2 libapache2-mod-php5
+ - sudo sed -i -e "s,/var/www,$(pwd)/vendor/behat/mink/tests/Behat/Mink/Driver/web-fixtures,g" /etc/apache2/sites-available/default
+ - sudo /etc/init.d/apache2 restart
+
+ - sudo apt-get install python-software-properties
+ - sudo add-apt-repository -y ppa:chris-lea/node.js
+ - sudo apt-get update
+ - sudo apt-get install nodejs nodejs-dev npm
+ - node --version
+ - npm --version
+ - npm install zombie
+
+ - export NODE_PATH="$(pwd)/node_modules"
+ - export PATH="/usr/local/share/npm/bin:$PATH"
+
+script: phpunit -v
