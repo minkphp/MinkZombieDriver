@@ -16,7 +16,7 @@ before_script:
  - sudo sed -i -e "s,/var/www,$(pwd)/vendor/behat/mink/tests/Behat/Mink/Driver/web-fixtures,g" /etc/apache2/sites-available/default
  - sudo /etc/init.d/apache2 restart
 
- - npm install zombie
+ - npm install zombie@0.12.15
 
  - export NODE_PATH="$(pwd)/node_modules"
  - export PATH="/usr/local/share/npm/bin:$PATH"
