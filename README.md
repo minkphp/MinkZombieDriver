@@ -1,7 +1,7 @@
 Mink Zombie.js Driver
 =====================
 
-+- [![Build Status](https://secure.travis-ci.org/Behat/MinkZombieDriver.png?branch=master)](http://travis-ci.org/Behat/MinkZombieDriver)
+- [![Build Status](https://secure.travis-ci.org/Behat/MinkZombieDriver.png?branch=master)](http://travis-ci.org/Behat/MinkZombieDriver)
 
 Usage Example
 -------------
