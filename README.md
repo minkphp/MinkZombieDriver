@@ -33,8 +33,8 @@ npm install -g zombie@0.12.15
 ```
 
 (Due to unresolved compatibility issues with newer versions of
-Zombie.js, **we encourage you to not upgrade to a version newer
-than v0.13.0** at this time)
+Zombie.js, **we strongly encourage you to not upgrade to a version newer
+than v0.13.0** for now.)
 
 ``` json
 {
