@@ -633,7 +633,7 @@ browser.fire("click", node, function(err) {
 JS;
         $out = $this->server->evalJS($js);
         if (!empty($out)) {
-            throw new DriverException('Error while clicking button: [%s]', $out);
+            throw new DriverException(sprintf('Error while clicking button: [%s]', $out));
         }
     }
 
