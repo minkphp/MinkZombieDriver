@@ -38,7 +38,7 @@ than v0.13.0** for now.)
 
 ``` json
 {
-    "requires": {
+    "require": {
         "behat/mink":               "1.4.*",
         "behat/mink-zombie-driver": "*"
     }
