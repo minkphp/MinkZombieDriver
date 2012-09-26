@@ -241,7 +241,6 @@ abstract class Server
         // Create process object if neccessary
         if (null === $process) {
             $processBuilder = new ProcessBuilder(array(
-                'exec',
                 $this->nodeBin,
                 $this->serverPath,
             ));
