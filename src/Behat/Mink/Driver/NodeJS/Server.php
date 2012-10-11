@@ -305,7 +305,7 @@ abstract class Server
 
     /**
      * Stops the server process
-     *
+     * Uses command from @link http://stackoverflow.com/a/5266208/187954
      * @link    https://github.com/symfony/Process
      */
     public function stop()
