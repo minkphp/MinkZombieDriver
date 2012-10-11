@@ -312,7 +312,11 @@ abstract class Server
             return;
         }
 
-        if ($this->doEvalJS($this->connection, 'process.exit(0)')) {
+        if (!$this->getConnection() === null) {
+            return;
+        }
+
+        if ($this->doEvalJS($this->getConnection(), 'process.exit(0)')) {
             $this->process = null;
         }
         return;
