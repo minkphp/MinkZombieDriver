@@ -38,6 +38,12 @@ abstract class Server
     protected $nodeBin;
 
     /**
+     * @var string The full path to the NodeJS modules directory.
+     * @default /usr/lib/node_modules
+     */
+    protected $nodeModulesPath = '/usr/lib/node_modules';
+
+    /**
      * @var     string
      */
     protected $serverPath;
@@ -163,6 +169,29 @@ abstract class Server
     }
 
     /**
+     * Setter NodeJS modules path
+     *
+     * @param   string  $nodeBin  Path to NodeJS modules.
+     */
+    public function setNodeModulesPath($nodeModulesPath)
+    {
+        if (!is_dir($nodeModulesPath)) {
+            throw new InvalidArgumentException("Node modules path {$nodeModulesPath} is not a directory");
+        }
+        $this->nodeModulesPath = $nodeModulesPath;
+    }
+
+    /**
+     * Getter NodeJS modules path.
+     *
+     * @return  string  Path to NodeJS binary.
+     */
+    public function getNodeModulesPath()
+    {
+        return $this->nodeModulesPath;
+    }
+
+    /**
      * Setter server script path
      *
      * @param   string  $serverPath  Path to server script
@@ -270,7 +299,7 @@ abstract class Server
 
     /**
      * Stops the server process
-     *
+     * Uses command from @link http://stackoverflow.com/a/5266208/187954
      * @link    https://github.com/symfony/Process
      */
     public function stop()
@@ -279,7 +308,18 @@ abstract class Server
             return;
         }
 
-        $this->process->stop();
+        if (!$this->isRunning()) {
+            return;
+        }
+
+        if (!$this->getConnection() === null) {
+            return;
+        }
+
+        if ($this->doEvalJS($this->getConnection(), 'process.exit(0)')) {
+            $this->process = null;
+        }
+        return;
     }
 
     /**
@@ -352,7 +392,7 @@ abstract class Server
                   );
             }
             if ($this->process->isRunning()) {
-              $this->process->stop();
+              $this->stop();
               throw new \RuntimeException(sprintf(
                   "Server did not respond in time: (%s) [Stopped]",
                   $this->process->getExitCode()
