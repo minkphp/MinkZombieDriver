@@ -1,5 +1,5 @@
 {
-    "name":         "behat/mink-zombie-driver",
+    "name":         "faceleg/mink-zombie-driver",
     "description":  "Zombie.js driver for Mink framework",
     "keywords":     ["zombie", "headless", "javascript", "ajax", "testing", "browser"],
     "homepage":     "http://mink.behat.org/",
