@@ -314,7 +314,14 @@ abstract class Server
             return;
         }
 
-        $this->process->stop();
+        if (!$this->isRunning()) {
+            return;
+        }
+
+        if ($this->doEvalJS($this->connection, 'process.exit(0)')) {
+            $this->process = null;
+        }
+        return;
     }
 
     /**
@@ -387,7 +394,7 @@ abstract class Server
                   );
             }
             if ($this->process->isRunning()) {
-              $this->process->stop();
+              $this->stop();
               throw new \RuntimeException(sprintf(
                   "Server did not respond in time: (%s) [Stopped]",
                   $this->process->getExitCode()
