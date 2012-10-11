@@ -184,15 +184,10 @@ abstract class Server
     /**
      * Getter NodeJS modules path.
      *
-     * @param  string|null $moduleName Name of the node module to append to
-     * the modules path.
      * @return  string  Path to NodeJS binary.
      */
-    public function getNodeModulesPath($moduleName = null)
+    public function getNodeModulesPath()
     {
-        if ($moduleName) {
-            return "{$this->nodeModulesPath}/{$moduleName}";
-        }
         return $this->nodeModulesPath;
     }
 
