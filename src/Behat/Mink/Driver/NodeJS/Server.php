@@ -38,6 +38,12 @@ abstract class Server
     protected $nodeBin;
 
     /**
+     * @var string The full path to the NodeJS modules directory.
+     * @default /usr/lib/node_modules
+     */
+    protected $nodeModulesPath = '/usr/lib/node_modules';
+
+    /**
      * @var     string
      */
     protected $serverPath;
@@ -160,6 +166,35 @@ abstract class Server
     public function getNodeBin()
     {
         return $this->nodeBin;
+    }
+
+    /**
+     * Setter NodeJS modules path
+     *
+     * @param   string  $nodeBin  Path to NodeJS modules
+     */
+    public function setNodeModulesPath($nodeModulesPath)
+    {
+        if (!is_dir($nodeModulesPath)) {
+            throw new InvalidArgumentException("Node modules path {$nodeModulesPath} is not a directory");
+        }
+        $this->nodeModulesPath = $nodeModulesPath;
+    }
+
+    /**
+     * /**
+     * Getter NodeJS modules path
+     *
+     * @param  string|null $moduleName Name of the node module to append to
+     * the modules path.
+     * @return  string  Path to NodeJS binary.
+     */
+    public function getNodeModulesPath($moduleName = null)
+    {
+        if ($moduleName) {
+            return "{$this->nodeModulesPath}/{$moduleName}";
+        }
+        return $this->nodeModulesPath;
     }
 
     /**
