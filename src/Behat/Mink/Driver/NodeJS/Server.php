@@ -171,7 +171,7 @@ abstract class Server
     /**
      * Setter NodeJS modules path
      *
-     * @param   string  $nodeBin  Path to NodeJS modules
+     * @param   string  $nodeBin  Path to NodeJS modules.
      */
     public function setNodeModulesPath($nodeModulesPath)
     {
@@ -182,8 +182,7 @@ abstract class Server
     }
 
     /**
-     * /**
-     * Getter NodeJS modules path
+     * Getter NodeJS modules path.
      *
      * @param  string|null $moduleName Name of the node module to append to
      * the modules path.
