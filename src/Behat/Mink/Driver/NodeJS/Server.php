@@ -38,12 +38,6 @@ abstract class Server
     protected $nodeBin;
 
     /**
-     * @var string The full path to the NodeJS modules directory.
-     * @default /usr/lib/node_modules
-     */
-    protected $nodeModulesPath = '/usr/lib/node_modules';
-
-    /**
      * @var     string
      */
     protected $serverPath;
@@ -52,6 +46,11 @@ abstract class Server
      * @var     int
      */
     protected $threshold;
+
+    /**
+     * @var string The full path to the NodeJS modules directory.
+     */
+    protected $nodeModulesPath;
 
     /**
      * @var     Symfony\Component\Process\Process
@@ -66,36 +65,39 @@ abstract class Server
     /**
      * Constructor
      *
-     * @param  string  $host        The server host
-     * @param  int     $port        The server port
-     * @param  string  $nodeBin     Path to NodeJS binary
-     * @param  string  $serverPath  Path to server script
-     * @param  int     $threshold   Threshold value in micro seconds
+     * @param  string  $host             The server host
+     * @param  int     $port             The server port
+     * @param  string  $nodeBin          Path to NodeJS binary
+     * @param  string  $serverPath       Path to server script
+     * @param  int     $threshold        Threshold value in micro seconds
+     * @param  string  $nodeModulesPath  Path to node_modules directory
      */
     public function __construct(
-        $host       = '127.0.0.1',
-        $port       = 8124,
-        $nodeBin    = null,
-        $serverPath = null,
-        $threshold  = 2000000
+        $host            = '127.0.0.1',
+        $port            = 8124,
+        $nodeBin         = null,
+        $serverPath      = null,
+        $threshold       = 2000000,
+        $nodeModulesPath = ''
     )
     {
         if (null === $nodeBin) {
             $nodeBin = 'node';
         }
 
-        $this->host       = $host;
-        $this->port       = intval($port);
-        $this->nodeBin    = $nodeBin;
+        $this->host            = $host;
+        $this->port            = intval($port);
+        $this->nodeBin         = $nodeBin;
 
         if (null === $serverPath) {
             $serverPath = $this->createTemporaryServer();
         }
 
-        $this->serverPath = $serverPath;
-        $this->threshold  = intval($threshold);
-        $this->process    = null;
-        $this->connection = null;
+        $this->serverPath      = $serverPath;
+        $this->threshold       = intval($threshold);
+        $this->nodeModulesPath = $nodeModulesPath;
+        $this->process         = null;
+        $this->connection      = null;
     }
 
     /**
@@ -175,8 +177,10 @@ abstract class Server
      */
     public function setNodeModulesPath($nodeModulesPath)
     {
-        if (!is_dir($nodeModulesPath)) {
-            throw new InvalidArgumentException("Node modules path {$nodeModulesPath} is not a directory");
+        if (!is_dir($nodeModulesPath) || !preg_match('/\/$/', $nodeModulesPath)) {
+            throw new \InvalidArgumentException(sprintf(
+                "Node modules path '%s' is not a directory and/or does not end with a trailing '/'", $nodeModulesPath
+            ));
         }
         $this->nodeModulesPath = $nodeModulesPath;
     }
@@ -299,7 +303,6 @@ abstract class Server
 
     /**
      * Stops the server process
-     * Uses command from @link http://stackoverflow.com/a/5266208/187954
      * @link    https://github.com/symfony/Process
      */
     public function stop()
@@ -312,14 +315,13 @@ abstract class Server
             return;
         }
 
-        if (!$this->getConnection() === null) {
-            return;
-        }
-
-        if ($this->doEvalJS($this->getConnection(), 'process.exit(0)')) {
+        if (null !== $this->getConnection()) {
+            // Force a 'clean' exit
+            // See: http://stackoverflow.com/a/5266208/187954
+            $this->doEvalJS($this->getConnection(), 'process.exit(0);');
+            $this->process->stop();
             $this->process = null;
         }
-        return;
     }
 
     /**
@@ -416,8 +418,9 @@ abstract class Server
     protected function createTemporaryServer()
     {
         $serverScript = strtr($this->getServerScript(), array(
-            '%host%' => $this->host,
-            '%port%' => $this->port,
+            '%host%'         => $this->host,
+            '%port%'         => $this->port,
+            '%modules_path%' => $this->nodeModulesPath,
           ));
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
         file_put_contents($serverPath, $serverScript);

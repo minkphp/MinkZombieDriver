@@ -34,6 +34,33 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('node', $server->getNodeBin());
         $this->assertEquals('/path/to/server', $server->getServerPath());
         $this->assertEquals(2000000, $server->getThreshold());
+        $this->assertEquals('', $server->getNodeModulesPath());
+    }
+
+    public function testSetNodeModulesPath()
+    {
+        $server = new TestServer();
+        $server->setNodeModulesPath('../../');
+
+        $this->assertEquals('../../', $server->getNodeModulesPath());
+    }
+
+    /**
+     * @expectedException  \InvalidArgumentException
+     */
+    public function testSetNodeModulesPathWithInvalidPath()
+    {
+        $server = new TestServer();
+        $server->setNodeModulesPath('/does/not/exist/');
+    }
+
+    /**
+     * @expectedException  \InvalidArgumentException
+     */
+    public function testSetNodeModulesPathWithoutTrailingSlash()
+    {
+        $server = new TestServer();
+        $server->setNodeModulesPath('../..');
     }
 
     /**

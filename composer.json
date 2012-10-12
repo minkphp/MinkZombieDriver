@@ -24,7 +24,5 @@
         "psr-0": {
             "Behat\\Mink\\Driver": "src/"
         }
-    },
-
-    "minimum-stability": "dev"
+    }
 }

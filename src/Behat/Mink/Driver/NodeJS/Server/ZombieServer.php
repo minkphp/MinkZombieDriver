@@ -26,10 +26,9 @@ class ZombieServer extends Server
 
     protected function getServerScript()
     {
-
         $js = <<<'JS'
 var net      = require('net')
-  , zombie   = require('%%NODE_MODULES%%/zombie')
+  , zombie   = require('%modules_path%zombie')
   , browser  = null
   , pointers = []
   , buffer   = ""
@@ -59,6 +58,7 @@ net.createServer(function (stream) {
   console.log('server started on ' + host + ':' + port);
 });
 JS;
-        return str_replace('%%NODE_MODULES%%', $this->getNodeModulesPath(), $js);
+
+        return $js;
     }
 }
