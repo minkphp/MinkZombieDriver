@@ -7,6 +7,8 @@ use Behat\Mink\Driver\NodeJS\Server as BaseServer;
 
 class TestServer extends BaseServer
 {
+    public $serverScript = null;
+
     protected function doEvalJS(Connection $conn, $str, $returnType = 'js')
     {
         return '';
@@ -14,11 +16,21 @@ class TestServer extends BaseServer
 
     protected function getServerScript()
     {
-        return '';
+        return <<<JS
+var zombie = require('%modules_path%zombie')
+  , host   = '%host%'
+  , port   = %port%;
+JS;
     }
 
     protected function createTemporaryServer()
     {
+        $this->serverScript = strtr($this->getServerScript(), array(
+            '%host%'         => $this->host,
+            '%port%'         => $this->port,
+            '%modules_path%' => $this->nodeModulesPath,
+          ));
+
         return '/path/to/server';
     }
 }
@@ -35,6 +47,39 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path/to/server', $server->getServerPath());
         $this->assertEquals(2000000, $server->getThreshold());
         $this->assertEquals('', $server->getNodeModulesPath());
+
+        $expected = <<<JS
+var zombie = require('zombie')
+  , host   = '127.0.0.1'
+  , port   = 8124;
+JS;
+        $this->assertEquals($expected, $server->serverScript);
+    }
+
+    public function testCreateCustomServer()
+    {
+        $server = new TestServer(
+            '123.123.123.123',
+            1234,
+            null,
+            null,
+            5000000,
+            '../../'
+        );
+
+        $this->assertEquals('123.123.123.123', $server->getHost());
+        $this->assertEquals(1234, $server->getPort());
+        $this->assertEquals('node', $server->getNodeBin());
+        $this->assertEquals('/path/to/server', $server->getServerPath());
+        $this->assertEquals(5000000, $server->getThreshold());
+        $this->assertEquals('../../', $server->getNodeModulesPath());
+
+        $expected = <<<JS
+var zombie = require('../../zombie')
+  , host   = '123.123.123.123'
+  , port   = 1234;
+JS;
+        $this->assertEquals($expected, $server->serverScript);
     }
 
     public function testSetNodeModulesPath()
@@ -43,6 +88,13 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $server->setNodeModulesPath('../../');
 
         $this->assertEquals('../../', $server->getNodeModulesPath());
+
+        $expected = <<<JS
+var zombie = require('../../zombie')
+  , host   = '127.0.0.1'
+  , port   = 8124;
+JS;
+        $this->assertEquals($expected, $server->serverScript);
     }
 
     /**

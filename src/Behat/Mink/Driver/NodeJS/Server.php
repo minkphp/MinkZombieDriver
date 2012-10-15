@@ -88,6 +88,7 @@ abstract class Server
         $this->host            = $host;
         $this->port            = intval($port);
         $this->nodeBin         = $nodeBin;
+        $this->nodeModulesPath = $nodeModulesPath;
 
         if (null === $serverPath) {
             $serverPath = $this->createTemporaryServer();
@@ -95,7 +96,6 @@ abstract class Server
 
         $this->serverPath      = $serverPath;
         $this->threshold       = intval($threshold);
-        $this->nodeModulesPath = $nodeModulesPath;
         $this->process         = null;
         $this->connection      = null;
     }
@@ -183,6 +183,7 @@ abstract class Server
             ));
         }
         $this->nodeModulesPath = $nodeModulesPath;
+        $this->serverPath = $this->createTemporaryServer();
     }
 
     /**
