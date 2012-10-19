@@ -3,6 +3,7 @@
 namespace Tests\Behat\Mink\Driver;
 
 use Behat\Mink\Driver\ZombieDriver,
+    Behat\Mink\Driver\NodeJS\Server\ManualStartZombieServer,
     Behat\Mink\Driver\NodeJS\Server\ZombieServer;
 
 /**
@@ -12,7 +13,11 @@ class ZombieDriverTest extends JavascriptDriverTest
 {
     protected static function getDriver()
     {
-        $server = new ZombieServer('127.0.0.1', 8124, 'node');
+        if (getenv("NO_AUTO_START") == 1) {
+            $server = new ManualStartZombieServer('127.0.0.1', 8124);
+        } else {
+            $server = new ZombieServer('127.0.0.1', 8124, 'node');
+        }
 
         return new ZombieDriver($server);
     }
