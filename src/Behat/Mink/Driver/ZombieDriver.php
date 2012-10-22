@@ -137,7 +137,9 @@ class ZombieDriver implements DriverInterface
         $this->nativeRefs = array();
 
         $js = <<<JS
-browser.cookies(browser.window.location.hostname, '/').clear();
+if (browser && browser.window) {
+    browser.cookies(browser.window.location.hostname, '/').clear();
+}
 browser = null;
 pointers = [];
 stream.end();
