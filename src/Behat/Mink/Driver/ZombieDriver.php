@@ -499,7 +499,7 @@ if (tagName == "INPUT") {
     value = node.value;
   }
 } else if (tagName == "TEXTAREA") {
-  value = node.text;
+  value = node.value;
 } else if (tagName == "SELECT") {
   if (node.getAttribute('multiple')) {
     value = [];
