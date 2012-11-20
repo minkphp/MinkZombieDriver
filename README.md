@@ -17,7 +17,7 @@ use Behat\Mink\Mink,
 $startUrl = 'http://example.com';
 
 $mink = new Mink(array(
-    'zombie' => new Session(new ZombieDriver(ZombieServer(
+    'zombie' => new Session(new ZombieDriver(new ZombieServer(
         $host, $port, $nodeBinary
     ))),
 ));
