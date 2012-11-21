@@ -30,7 +30,7 @@ class ManualStartZombieServer extends ZombieServer
      */
     public function stop()
     {
-        unset($this->connection);
+        $this->connection = null;
     }
 
     /**
