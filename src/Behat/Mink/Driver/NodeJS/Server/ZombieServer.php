@@ -28,7 +28,7 @@ class ZombieServer extends Server
     {
         $js = <<<'JS'
 var net      = require('net')
-  , zombie   = require('%modules_path%zombie')
+  , Browser  = require('%modules_path%zombie')
   , browser  = null
   , pointers = []
   , buffer   = ""
@@ -45,7 +45,7 @@ net.createServer(function (stream) {
 
   stream.on('end', function () {
     if (browser == null) {
-      browser = new zombie.Browser();
+      browser = new Browser();
 
       // Clean up old pointers
       pointers = [];
