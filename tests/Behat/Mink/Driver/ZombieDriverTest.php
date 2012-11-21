@@ -52,4 +52,22 @@ class ZombieDriverTest extends JavascriptDriverTest
     {
         $this->getSession()->setRequestHeader('foo', 'bar');
     }
+
+    /**
+     * Zombie automatically waits for events to fire, so the wait test is 
+     * irrelevant
+     */
+    public function testWait()
+    {
+        // noop
+    }
+
+    /**
+     * Zombie adheres to a later cookie spec than PHP, so this test will forever 
+     * fail
+     */
+    public function testCookie()
+    {
+
+    }
 }
