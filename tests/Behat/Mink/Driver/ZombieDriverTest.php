@@ -54,20 +54,16 @@ class ZombieDriverTest extends JavascriptDriverTest
     }
 
     /**
-     * Zombie automatically waits for events to fire, so the wait test is 
-     * irrelevant
      */
     public function testWait()
     {
-        // noop
+        $this->markTestIncomplete("Zombie automatically waits for events to fire, so the wait test is irrelevant");
     }
 
     /**
-     * Zombie adheres to a later cookie spec than PHP, so this test will forever 
-     * fail
      */
     public function testCookie()
     {
-
+        $this->markTestIncomplete("Zombie adheres to a later cookie spec than PHP, so this test will fail forever");
     }
 }
