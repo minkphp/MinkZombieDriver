@@ -157,9 +157,6 @@ JS;
      */
     public function visit($url)
     {
-        if ($url == $this->getCurrentUrl()) {
-            $this->reload();
-        }
         // Cleanup cached references
         $this->nativeRefs = array();
 
@@ -187,7 +184,7 @@ JS;
      */
     public function getCurrentUrl()
     {
-        return $this->server->evalJS('browser.location ? browser.location.toString() : ""', 'json');
+        return $this->server->evalJS('browser.location.toString()', 'json');
     }
 
     /**
@@ -195,23 +192,7 @@ JS;
      */
     public function reload()
     {
-        $this->nativeRefs = array();
-        $js = <<<JS
-pointers = [];
-browser.reload(function(err) {
-  if (err) {
-    stream.end(JSON.stringify(err.stack));
-  } else {
-    stream.end();
-  }
-});
-
-JS;
-        $out = $this->server->evalJS($js);
-
-        if (!empty($out)) {
-          throw new DriverException(sprintf("Could not load resource for URL '%s'", $url));
-        }
+        $this->visit($this->getCurrentUrl());
     }
 
     /**
