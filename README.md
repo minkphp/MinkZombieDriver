@@ -19,7 +19,7 @@ $port = '8124';
 $nodeBinary = '/usr/local/Cellar/node/0.8.14/bin/node';
 
 $mink = new Mink(array(
-    'zombie' => new Session(new ZombieDriver(ZombieServer(
+    'zombie' => new Session(new ZombieDriver(new ZombieServer(
         $host, $port, $nodeBinary
     ))),
 ));
