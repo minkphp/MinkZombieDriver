@@ -14,7 +14,9 @@ use Behat\Mink\Mink,
     Behat\Mink\Driver\ZombieDriver,
     Behat\Mink\Driver\NodeJS\Server\ZombieServer;
 
-$startUrl = 'http://example.com';
+$host = '127.0.0.1';
+$port = '8124';
+$nodeBinary = '/usr/local/Cellar/node/0.8.14/bin/node';
 
 $mink = new Mink(array(
     'zombie' => new Session(new ZombieDriver(ZombieServer(
@@ -22,7 +24,19 @@ $mink = new Mink(array(
     ))),
 ));
 
-$mink->getSession('zombie')->getPage()->findLink('Chat')->click();
+$mink->setDefaultSessionName('zombie');
+
+$session = $mink->getSession();
+
+$startUrl = 'http://example.com';
+
+$session->visit($startUrl);
+
+$page = $session->getPage();
+
+$el = $page->find('css', 'h1');
+
+echo $el->getText();
 ```
 
 Installation
