@@ -519,7 +519,6 @@ JS;
 
         $js = <<<JS
 var node = {$ref},
-    tagName = node.tagName;
 
   var type = node.getAttribute('type');
   if (type == "checkbox") {
