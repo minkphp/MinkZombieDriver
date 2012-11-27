@@ -518,8 +518,7 @@ JS;
         $value = json_encode($value);
 
         $js = <<<JS
-var node = {$ref},
-
+var node = {$ref};
   var type = node.getAttribute('type');
   if (type == "checkbox") {
     {$value} ? browser.check(node) : browser.uncheck(node);
@@ -528,7 +527,6 @@ var node = {$ref},
   } else {
     browser.fill(node, {$value});
   }
-
 stream.end();
 JS;
         $this->server->evalJS($js);
