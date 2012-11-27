@@ -520,9 +520,7 @@ JS;
         $js = <<<JS
 var node = {$ref},
     tagName = node.tagName;
-if (tagName == "TEXTAREA") {
-  node.textContent = {$value};
-} else {
+
   var type = node.getAttribute('type');
   if (type == "checkbox") {
     {$value} ? browser.check(node) : browser.uncheck(node);
@@ -531,7 +529,7 @@ if (tagName == "TEXTAREA") {
   } else {
     browser.fill(node, {$value});
   }
-}
+
 stream.end();
 JS;
         $this->server->evalJS($js);
