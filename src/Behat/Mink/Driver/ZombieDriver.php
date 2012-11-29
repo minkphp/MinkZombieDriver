@@ -168,11 +168,7 @@ browser.visit("{$url}", function(err) {
   }
 });
 JS;
-        $out = $this->server->evalJS($js);
-
-        if (!empty($out)) {
-          throw new DriverException(sprintf("Could not load resource for URL '%s'", $url));
-        }
+        $this->server->evalJS($js);
     }
 
     /**
