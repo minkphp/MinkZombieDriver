@@ -43,9 +43,9 @@ var versionCompare = function(v1, v2, op) {
       .reduce(function(previousValue, currentValue, index, arr){
         return previousValue + currentValue*Math.pow(10000, arr.length-index);
       }, 0);
-    }
+  };
 
-    return eval(normalize(v1) + " " + op + " " + normalize(v2));
+  return eval(normalize(v1) + " " + op + " " + normalize(v2));
 }
 
 var zombieVersion = require('%modules_path%zombie/package').version;
