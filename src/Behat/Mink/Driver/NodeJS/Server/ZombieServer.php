@@ -35,6 +35,24 @@ var net      = require('net')
   , host     = '%host%'
   , port     = %port%;
 
+var versionCompare = function(v1, v2, op) {
+  var normalize = function(versionString) {
+    return versionString
+      .split(".")
+      .map(function(digit) { return parseInt(digit, 10) })
+      .reduce(function(previousValue, currentValue, index, arr){
+        return previousValue + currentValue*Math.pow(10000, arr.length-index);
+      }, 0);
+    }
+
+    return eval(normalize(v1) + " " + op + " " + normalize(v2));
+}
+
+var zombieVersion = require('%modules_path%zombie/package').version;
+if (false == versionCompare("1.4.1", zombieVersion, ">=")) {
+  throw new Error("Your zombie.js version is not compatible with this driver. Please use a version <= 1.4.1");
+}
+
 net.createServer(function (stream) {
   stream.setEncoding('utf8');
   stream.allowHalfOpen = true;
