@@ -8,7 +8,7 @@ Installation & Compatibility
 
 You need a working installation of [NodeJS](http://nodejs.org/) and
 [npm](https://npmjs.org/). Install the
-[zombie.js](http://zombie.labnotes.org) library throught npm:
+[zombie.js](http://zombie.labnotes.org) library through npm:
 
 ``` bash
 npm install -g zombie@0.12.15
