@@ -68,7 +68,7 @@ $mink = new Mink(array(
 $mink->setDefaultSessionName('zombie');
 
 $session = $mink->getSession();
-$session->visit('http://example.org);
+$session->visit('http://example.org');
 
 $page = $session->getPage();
 $elem = $page->find('css', 'h1');
