@@ -9,8 +9,8 @@ env:
   - SYMFONY_VERSION='2.2.*@dev'
 
 before_script:
- - export WEB_FIXTURES_HOST=http://localhost
- - export WEB_FIXTURES_BROWSER=firefox
+  - export WEB_FIXTURES_HOST=http://localhost
+  - export WEB_FIXTURES_BROWSER=firefox
 
   # Install deps
   - curl http://getcomposer.org/installer | php
