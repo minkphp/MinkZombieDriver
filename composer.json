@@ -21,7 +21,7 @@
 
     "require": {
         "php":              ">=5.3.1",
-        "behat/mink":       ">=1.4,<1.5",
+        "behat/mink":       ">=1.4,<1.5-dev",
         "symfony/process":  ">=2.1,<2.3-dev"
     },
 
