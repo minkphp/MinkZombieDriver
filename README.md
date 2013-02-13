@@ -34,14 +34,14 @@ Use [Composer](http://getcomposer.org/) to install all required PHP dependencies
 {
     "require": {
         "behat/mink":               "1.4.*",
-        "behat/mink-zombie-driver": "*"
+        "behat/mink-zombie-driver": "1.0.*@dev"
     }
 }
 ```
 
 ``` bash
-curl http://getcomposer.org/installer | php
-php composer.phar install
+$> curl http://getcomposer.org/installer | php
+$> php composer.phar install
 ```
 
 Usage Example
