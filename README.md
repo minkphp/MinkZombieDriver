@@ -34,7 +34,7 @@ Use [Composer](http://getcomposer.org/) to install all required PHP dependencies
 {
     "require": {
         "behat/mink":               "1.4.*",
-        "behat/mink-zombie-driver": "1.0.*@dev"
+        "behat/mink-zombie-driver": "1.0.*"
     }
 }
 ```
