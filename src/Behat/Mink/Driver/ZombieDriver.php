@@ -24,6 +24,10 @@ use Behat\Mink\Session,
  */
 class ZombieDriver implements DriverInterface
 {
+    /**
+     * @var Session
+     */
+    private $session;
     private $started = false;
     private $nativeRefs = array();
     private $server = null;
