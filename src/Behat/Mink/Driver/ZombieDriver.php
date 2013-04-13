@@ -22,7 +22,7 @@ use Behat\Mink\Session,
  *
  * @author Pascal Cremer <b00gizm@gmail.com>
  */
-class ZombieDriver implements DriverInterface
+class ZombieDriver extends CoreDriver
 {
     /**
      * @var Session
@@ -210,30 +210,6 @@ JS;
     }
 
     /**
-     * Switches to specific browser window.
-     *
-     * @param string $name window name (null for switching back to main window)
-     *
-     * @throws UnsupportedDriverActionException
-     */
-    public function switchToWindow($name = null)
-    {
-        throw new UnsupportedDriverActionException('Window management is not supported by %s', $this);
-    }
-
-    /**
-     * Switches to specific iFrame.
-     *
-     * @param string $name iframe name (null for switching back)
-     *
-     * @throws UnsupportedDriverActionException
-     */
-    public function switchToIFrame($name = null)
-    {
-        throw new UnsupportedDriverActionException('iFrame management is not supported by %s', $this);
-    }
-
-    /**
      * Sets HTTP Basic authentication parameters
      *
      * @param string|Boolean $user     user name or false to disable authentication
@@ -329,16 +305,6 @@ JS;
     public function getContent()
     {
         return html_entity_decode($this->server->evalJS('browser.html()', 'json'));
-    }
-
-    /**
-     * Capture a screenshot of the current window.
-     *
-     * @throws UnsupportedDriverActionException
-     */
-    public function getScreenshot()
-    {
-        throw new UnsupportedDriverActionException('Screenshots are not supported by %s', $this);
     }
 
     /**
@@ -769,17 +735,6 @@ JS;
     }
 
     /**
-     * Drag one element onto another.
-     *
-     * @param string $sourceXpath
-     * @param string $destinationXpath
-     */
-    public function dragTo($sourceXpath, $destinationXpath)
-    {
-        throw new UnsupportedDriverActionException('Dragging is not supported by %s', $this);
-    }
-
-    /**
      * Executes JS script.
      *
      * @param string $script
@@ -822,20 +777,6 @@ browser.wait(function(window) {
 });
 JS;
         $this->server->evalJS($js);
-    }
-
-    /**
-     * Set the dimensions of the window.
-     *
-     * @param integer $width set the window width, measured in pixels
-     * @param integer $height set the window height, measured in pixels
-     * @param string $name window name (null for the main window)
-     *
-     * @throws UnsupportedDriverActionException
-     */
-    public function resizeWindow($width, $height, $name = null)
-    {
-        throw new UnsupportedDriverActionException('Window resizing is not supported by %s', $this);
     }
 
     /**
