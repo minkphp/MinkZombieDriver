@@ -217,7 +217,16 @@ JS;
      */
     public function setBasicAuth($user, $password)
     {
-        $this->server->evalJS("browser.credentials = { credentials: { schema: 'basic', username: '{$user}', password: '{$password}'}};stream.end();");
+        $js = <<<JS
+            if ('function' === typeof browser.authenticate) {
+                browser.authenticate().basic('{$user}', '{$password}');
+            } else {
+                browser.credentials = { credentials: { schema: 'basic', username: '{$user}', password: '{$password}'}};
+            }
+            stream.end();
+JS;
+
+        $this->server->evalJS($js);
     }
 
     /**
