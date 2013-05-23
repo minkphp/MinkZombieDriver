@@ -141,7 +141,9 @@ class ZombieDriver extends CoreDriver
         $this->nativeRefs = array();
 
         $js = <<<JS
-browser.cookies(browser.window.location.hostname, '/').clear();
+if (browser && browser.window) {
+    browser.cookies(browser.window.location.hostname, '/').clear();
+}
 browser = null;
 pointers = [];
 stream.end();
@@ -217,7 +219,7 @@ JS;
      */
     public function setBasicAuth($user, $password)
     {
-        $this->server->evalJS("browser.credentials = { credentials: { schema: 'basic', username: '{$user}', password: '{$password}'}};stream.end();");
+        $this->server->evalJS("browser.authenticate().basic('{$user}', '{$password}');stream.end();");
     }
 
     /**
@@ -444,7 +446,7 @@ if (tagName == "INPUT") {
     value = node.value;
   }
 } else if (tagName == "TEXTAREA") {
-  value = node.text;
+  value = node.value;
 } else if (tagName == "SELECT") {
   if (node.getAttribute('multiple')) {
     value = [];
