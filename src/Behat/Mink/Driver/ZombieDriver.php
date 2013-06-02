@@ -763,6 +763,8 @@ JS;
      *
      * @param integer $time      time in milliseconds
      * @param string  $condition JS condition
+     *
+     * @return boolean
      */
     public function wait($time, $condition)
     {
@@ -776,7 +778,7 @@ browser.wait(function(window) {
     stream.end();
 });
 JS;
-        $this->server->evalJS($js);
+        return (bool)$this->server->evalJS($js, 'json');
     }
 
     /**
