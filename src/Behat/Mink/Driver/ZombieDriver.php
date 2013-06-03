@@ -769,13 +769,17 @@ JS;
     public function wait($time, $condition)
     {
         $js = <<<JS
+var condition_met = false;
+
 browser.waitFor = {$time};
 browser.wait(function(window) {
     with(window) {
+        condition_met = {$condition};
+
         return {$condition};
     }
 }, function() {
-    stream.end(JSON.stringify(result));
+    stream.end(JSON.stringify(condition_met));
 });
 JS;
         return (bool)$this->server->evalJS($js, 'json');
