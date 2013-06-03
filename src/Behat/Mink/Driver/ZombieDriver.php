@@ -775,7 +775,7 @@ browser.wait(function(window) {
         return {$condition};
     }
 }, function() {
-    stream.end();
+    stream.end(JSON.stringify(result));
 });
 JS;
         return (bool)$this->server->evalJS($js, 'json');
