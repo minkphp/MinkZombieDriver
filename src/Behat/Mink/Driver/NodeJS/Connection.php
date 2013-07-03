@@ -63,7 +63,7 @@ class Connection
     /**
      * Sends a payload string of Javascript code to the Zombie Node.js server.
      *
-     * @param   string $js   String of Javascript code
+     * @param   string  $js   String of Javascript code
      *
      * @throws  \RuntimeException Could not establish connection
      * @return  string
