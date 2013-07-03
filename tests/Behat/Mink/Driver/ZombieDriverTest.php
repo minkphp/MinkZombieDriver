@@ -54,11 +54,10 @@ class ZombieDriverTest extends JavascriptDriverTest
         $this->assertContains('foo bar', $session->getPage()->getText());
     }
 
-    /**
-     * @expectedException \Behat\Mink\Exception\UnsupportedDriverActionException
-     */
-    public function testNotAllowedHttpHeader()
+    public function testSetRequestHeader()
     {
         $this->getSession()->setRequestHeader('foo', 'bar');
+        $this->getSession()->visit($this->pathTo('/headers.php'));
+        $this->assertContains('[HTTP_FOO] => bar', $this->getSession()->getPage()->getText());
     }
 }
