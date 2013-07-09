@@ -53,12 +53,12 @@ abstract class Server
     protected $nodeModulesPath;
 
     /**
-     * @var     Symfony\Component\Process\Process
+     * @var     \Symfony\Component\Process\Process
      */
     protected $process;
 
     /**
-     * @var     Behat\Mink\Driver\NodeJS\Connection
+     * @var     \Behat\Mink\Driver\NodeJS\Connection
      */
     protected $connection;
 
@@ -173,7 +173,8 @@ abstract class Server
     /**
      * Setter NodeJS modules path
      *
-     * @param   string  $nodeBin  Path to NodeJS modules.
+     * @param   string  $nodeModulesPath  Path to NodeJS modules.
+     * @throws  \InvalidArgumentException Invalid path
      */
     public function setNodeModulesPath($nodeModulesPath)
     {
@@ -217,9 +218,9 @@ abstract class Server
     }
 
     /**
-     * Setter theshold value
+     * Setter threshold value
      *
-     * @param   int  $theshold  Threshold value in micro seconds
+     * @param   int  $threshold  Threshold value in micro seconds
      */
     public function setThreshold($threshold)
     {
@@ -239,7 +240,7 @@ abstract class Server
     /**
      * Getter process object
      *
-     * @return  Symfony\Component\Process\Process  The process object
+     * @return  \Symfony\Component\Process\Process  The process object
      */
     public function getProcess()
     {
@@ -249,7 +250,7 @@ abstract class Server
     /**
      * Getter connection object
      *
-     * @return  Behat\Mink\Driver\NodeJS\Connection
+     * @return  \Behat\Mink\Driver\NodeJS\Connection
      */
     public function getConnection()
     {
@@ -259,7 +260,7 @@ abstract class Server
     /**
      * Starts the server process
      *
-     * @param   Symfony\Component\Process\Process  $process  A process object
+     * @param   \Symfony\Component\Process\Process  $process  A process object
      *
      * @throws  \RuntimeException
      */
@@ -328,7 +329,7 @@ abstract class Server
     /**
      * Restarts the server process
      *
-     * @param   Symfony\Component\Process\Process  $process  A process object
+     * @param \Symfony\Component\Process\Process  $process  A process object
      */
     public function restart(Process $process = null)
     {
@@ -372,9 +373,9 @@ abstract class Server
      * JavaScript code for evaluation by the server and sending it over
      * the server connection socket
      *
-     * @param   Behat\Mink\Driver\NodeJS\Connection  $conn        The server connection
-     * @param   string                               $str         String of JavaScript code
-     * @param   string                               $returnType  The return type
+     * @param   \Behat\Mink\Driver\NodeJS\Connection  $conn        The server connection
+     * @param   string                                $str         String of JavaScript code
+     * @param   string                                $returnType  The return type
      *
      * @return  string  The eval'ed response
      */

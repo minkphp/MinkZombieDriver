@@ -41,7 +41,7 @@ class ZombieDriverTest extends JavascriptDriverTest
     }
 
     /**
-     * @expectedException Behat\Mink\Exception\UnsupportedDriverActionException
+     * @expectedException \Behat\Mink\Exception\UnsupportedDriverActionException
      */
     public function testNotAllowedHttpHeader()
     {
