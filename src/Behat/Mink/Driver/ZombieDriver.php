@@ -536,7 +536,7 @@ JS;
      *
      * @param string $xpath
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isChecked($xpath)
     {
@@ -552,7 +552,7 @@ JS;
      *
      * @param string  $xpath
      * @param string  $value
-     * @param Boolean $multiple
+     * @param boolean $multiple
      */
     public function selectOption($xpath, $value, $multiple = false)
     {
@@ -654,7 +654,7 @@ JS;
      *
      * @param string $xpath
      *
-     * @return Boolean
+     * @return boolean
      */
     public function isVisible($xpath)
     {

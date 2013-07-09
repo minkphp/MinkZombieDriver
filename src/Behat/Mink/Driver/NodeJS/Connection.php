@@ -65,6 +65,7 @@ class Connection
      *
      * @param   string  $js   String of Javascript code
      *
+     * @throws  \RuntimeException Could not establish connection
      * @return  string
      */
     public function socketSend($js)
