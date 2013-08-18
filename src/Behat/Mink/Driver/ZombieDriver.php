@@ -627,6 +627,22 @@ JS;
     }
 
     /**
+    * Checks whether select option, located by it's XPath query, is selected.
+    *
+    * @param string $xpath
+    *
+    * @return boolean
+    */
+   public function isSelected($xpath)
+   {
+       if (!$ref = $this->getNativeRefForXPath($xpath)) {
+           return false;
+       }
+
+       return (boolean)$this->server->evalJS("{$ref}.selected", 'json');
+   }
+
+    /**
      * Clicks button or link located by it's XPath query.
      *
      * @param string $xpath
