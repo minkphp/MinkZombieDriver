@@ -830,6 +830,20 @@ JS;
     }
 
     /**
+     * Submits the form.
+     *
+     * @param string $xpath Xpath.
+     */
+    public function submitForm($xpath)
+    {
+        if (!$ref = $this->getNativeRefForXPath($xpath)) {
+            return;
+        }
+
+        $this->server->evalJS("{$ref}.submit();stream.end();");
+    }
+
+    /**
      * Triggers (fires) a Zombie.js browser event.
      *
      * @param string $event The name of the event
