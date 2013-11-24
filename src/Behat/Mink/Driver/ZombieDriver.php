@@ -141,7 +141,7 @@ class ZombieDriver extends CoreDriver
         $this->nativeRefs = array();
 
         $js = <<<JS
-browser.cookies(browser.window.location.hostname, '/').clear();
+browser.deleteCookies();
 browser = null;
 pointers = [];
 stream.end();
@@ -221,6 +221,22 @@ JS;
     }
 
     /**
+     * Switches to specific browser window.
+     *
+     * @param string $name window name (null for switching back to main window)
+     */
+    public function switchToWindow($name = null)
+    {
+        if ($name === null) {
+            $name = '';
+        }
+
+        $nameEscaped = json_encode($name);
+
+        $this->server->evalJS("browser.tabs.current = {$nameEscaped}; stream.end();");
+    }
+
+    /**
      * Sets specific request header on client.
      *
      * @param string $name
@@ -256,9 +272,37 @@ JS;
      */
     public function setCookie($name, $value = null)
     {
-        $js = "browser.cookies(browser.window.location.hostname, '/')";
-        $js .= (null === $value) ? ".remove('{$name}')" : ".set('{$name}', '{$value}')";
-        $this->server->evalJS($js, 'json');
+        if ($value === null) {
+            $this->deleteCookie($name);
+
+            return;
+        }
+
+        $nameEscaped = json_encode($name);
+        $valueEscaped = json_encode($value);
+
+        $js = <<<JS
+var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname, path: '/'};
+
+browser.setCookie(cookieId, {$valueEscaped});
+stream.end();
+JS;
+
+        $this->server->evalJS($js);
+    }
+
+    protected function deleteCookie($name)
+    {
+        $nameEscaped = json_encode($name);
+
+        $js = <<<JS
+var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname};
+
+browser.deleteCookie(cookieId);
+stream.end();
+JS;
+
+        $this->server->evalJS($js);
     }
 
     /**
@@ -270,21 +314,20 @@ JS;
      */
     public function getCookie($name)
     {
+        $nameEscaped = json_encode($name);
+
         $js = <<<JS
-var cookieVal = browser.cookies(browser.window.location.hostname, '/').get('{$name}');
+var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname},
+    cookieVal = browser.getCookie(cookieId, false);
+
 if (cookieVal) {
-    stream.end(unescape(cookieVal))
+    stream.end(JSON.stringify(decodeURIComponent(cookieVal)));
 } else {
-    stream.end();
+    stream.end(JSON.stringify(null));
 }
 JS;
 
-        $res = $this->server->evalJS($js);
-        if (empty($res)) {
-            return null;
-        }
-
-        return $res;
+        return json_decode($this->server->evalJS($js));
     }
 
     /**
@@ -318,16 +361,24 @@ JS;
     {
         $xpathEncoded = json_encode($xpath);
         $js = <<<JS
-var refs = [];
-browser.xpath("{$xpath}").value.forEach(function(node) {
-  if (node.nodeType !== 10) {
-    pointers.push(node);
-    refs.push(pointers.length - 1);
-  }
-});
+var node,
+    refs = [],
+    result = browser.xpath({$xpathEncoded});
+
+while (node = result.iterateNext()) {
+    if (node.nodeType !== 10) {
+        pointers.push(node);
+        refs.push(pointers.length - 1);
+    }
+}
 stream.end(JSON.stringify(refs));
 JS;
-        $refs = (array)json_decode($this->server->evalJS($js));
+
+        $refs = json_decode($this->server->evalJS($js), true);
+
+        if (!$refs) {
+            return array();
+        }
 
         $elements = array();
         foreach ($refs as $i => $ref) {
@@ -406,9 +457,7 @@ JS;
             return null;
         }
 
-        $out = $this->server->evalJS("{$ref}.getAttribute('{$name}')", 'json');
-
-        return empty($out) ? null : $out;
+        return $this->server->evalJS("{$ref}.getAttribute('{$name}')", 'json');
     }
 
     /**
@@ -592,25 +641,22 @@ JS;
 
         $js = <<<JS
 var node    = {$ref},
-    tagName = node.tagName.toLowerCase();
+    tagName = node.tagName.toLowerCase(),
     type    = (node.getAttribute('type') || '').toLowerCase();
+
 if (tagName == "button" || (tagName == "input" && (type == "button" || type == "submit"))) {
   if (node.getAttribute('disabled')) {
     stream.end('This button is disabled');
   }
 }
-browser.fire("click", node, function(err) {
-  if (err) {
-    stream.end(JSON.stringify(err.stack));
-  } else {
-    stream.end();
-  }
-});
+stream.end();
 JS;
         $out = $this->server->evalJS($js);
         if (!empty($out)) {
             throw new DriverException(sprintf('Error while clicking button: [%s]', $out));
         }
+
+        $this->triggerBrowserEvent('click', $xpath);
     }
 
     /**
@@ -647,25 +693,6 @@ JS;
 
         $path = json_encode($path);
         $this->server->evalJS("browser.attach({$ref}, {$path});stream.end();");
-    }
-
-    /**
-     * Checks whether element visible located by it's XPath query.
-     *
-     * @param string $xpath
-     *
-     * @return boolean
-     */
-    public function isVisible($xpath)
-    {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
-
-        // This is kind of a workaround, because the current version of
-        // Zombie.js does not fully support the DOMElement's style attribute
-        $hiddenXpath = json_encode("./ancestor-or-self::*[contains(@style, 'display:none') or contains(@style, 'display: none')]");
-        return (0 == (int)$this->server->evalJS("browser.xpath({$hiddenXpath}, {$ref}).value.length", 'json'));
     }
 
     /**
@@ -763,20 +790,43 @@ JS;
      *
      * @param integer $time      time in milliseconds
      * @param string  $condition JS condition
+     *
+     * @return boolean
      */
     public function wait($time, $condition)
     {
         $js = <<<JS
-browser.waitFor = {$time};
+browser.waitDuration = {$time};
+
 browser.wait(function(window) {
     with(window) {
         return {$condition};
     }
-}, function() {
+}, null)
+.done(function() {
     stream.end();
 });
 JS;
         $this->server->evalJS($js);
+
+        $js = <<<JS
+with(browser.window) {
+    var conditionResult = {$condition};
+}
+stream.end(JSON.stringify(conditionResult));
+JS;
+
+        return json_decode($this->server->evalJS($js));
+    }
+
+    /**
+     * Returns last error.
+     *
+     * @return array
+     */
+    protected function getLastError()
+    {
+        return $this->server->evalJS('browser.lastError', 'json');
     }
 
     /**
@@ -794,7 +844,7 @@ JS;
         }
 
         $js = <<<JS
-browser.fire("{$event}", {$ref}, function(err) {
+browser.fire({$ref}, "{$event}", function(err) {
   if (err) {
     stream.end(JSON.stringify(err.stack));
   } else {

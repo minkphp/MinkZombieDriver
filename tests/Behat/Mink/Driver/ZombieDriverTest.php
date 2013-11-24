@@ -18,26 +18,45 @@ class ZombieDriverTest extends JavascriptDriverTest
     }
 
     /**
-     * As of 0.10.1, zombie.js doesn't support drag'n'drop
+     * Zombie.js waits until timeout ends before returning control to script (after ->click() call)
      */
-    public function testDragDrop() {}
+    public function testWait()
+    {
+        $this->markTestSkipped('Skipping, until https://github.com/assaf/zombie/issues/614 is fixed');
+    }
 
-    /**
-     * Zombie.js doesn't handle selects without values
-     */
-    public function testIssue193() {}
+    public function testCookie()
+    {
+        $this->markTestSkipped('Skipping, until https://github.com/assaf/zombie/issues/613 is fixed');
+    }
 
-    // Zombie.js doesn't support iFrames switching
-    public function testIFrame() {}
+    public function testVisibility()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t support visibility checking');
+    }
 
-    // Zombie.js doesn't support window switching
-    public function testWindow() {}
+    public function testDragDrop()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t support drag-n-drop operations since v0.10.1');
+    }
+
+    public function testIssue193()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t handle SELECT without values');
+    }
+
+    public function testIFrame()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t support iFrames switching');
+    }
 
     public function testSetUserAgent()
     {
-        $this->getSession()->setRequestHeader('user-agent', 'foo bar');
-        $this->getSession()->visit($this->pathTo('/headers.php'));
-        $this->assertContains('foo bar', $this->getSession()->getPage()->getText());
+        $session = $this->getSession();
+
+        $session->setRequestHeader('user-agent', 'foo bar');
+        $session->visit($this->pathTo('/headers.php'));
+        $this->assertContains('foo bar', $session->getPage()->getText());
     }
 
     /**

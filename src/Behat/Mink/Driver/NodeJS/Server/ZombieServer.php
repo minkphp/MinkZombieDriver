@@ -35,22 +35,95 @@ var net      = require('net')
   , host     = '%host%'
   , port     = %port%;
 
-var versionCompare = function(v1, v2, op) {
-  var normalize = function(versionString) {
-    return versionString
-      .split(".")
-      .map(function(digit) { return parseInt(digit, 10) })
-      .reduce(function(previousValue, currentValue, index, arr){
-        return previousValue + currentValue*Math.pow(10000, arr.length-index);
-      }, 0);
+var zombieVersionCompare = function(v2, op) {
+  var version_compare = function (v1, v2, operator) {
+    var i = 0,
+        x = 0,
+        compare = 0,
+        vm = {
+          'dev': -6,
+          'alpha': -5,
+          'a': -5,
+          'beta': -4,
+          'b': -4,
+          'RC': -3,
+          'rc': -3,
+          '#': -2,
+          'p': 1,
+          'pl': 1
+        },
+        prepVersion = function (v) {
+          v = ('' + v).replace(/[_\-+]/g, '.');
+          v = v.replace(/([^.\d]+)/g, '.$1.').replace(/\.{2,}/g, '.');
+
+          return (!v.length ? [-8] : v.split('.'));
+        },
+        numVersion = function (v) {
+          return !v ? 0 : (isNaN(v) ? vm[v] || -7 : parseInt(v, 10));
+        };
+
+      v1 = prepVersion(v1);
+      v2 = prepVersion(v2);
+      x = Math.max(v1.length, v2.length);
+
+      for (i = 0; i < x; i++) {
+        if (v1[i] == v2[i]) {
+          continue;
+        }
+
+        v1[i] = numVersion(v1[i]);
+        v2[i] = numVersion(v2[i]);
+
+        if (v1[i] < v2[i]) {
+          compare = -1;
+          break;
+        } else if (v1[i] > v2[i]) {
+          compare = 1;
+          break;
+        }
+      }
+
+      if (!operator) {
+        return compare;
+      }
+
+      switch (operator) {
+        case '>':
+        case 'gt':
+          return (compare > 0);
+
+        case '>=':
+        case 'ge':
+          return (compare >= 0);
+
+        case '<=':
+        case 'le':
+          return (compare <= 0);
+
+        case '==':
+        case '=':
+        case 'eq':
+          return (compare === 0);
+
+        case '<>':
+        case '!=':
+        case 'ne':
+          return (compare !== 0);
+
+        case '':
+        case '<':
+        case 'lt':
+          return (compare < 0);
+      }
+
+      return null;
   };
 
-  return eval(normalize(v1) + " " + op + " " + normalize(v2));
-}
+  return version_compare(require('%modules_path%zombie/package').version, v2, op);
+};
 
-var zombieVersion = require('%modules_path%zombie/package').version;
-if (false == versionCompare("1.4.1", zombieVersion, ">=")) {
-  throw new Error("Your zombie.js version is not compatible with this driver. Please use a version <= 1.4.1");
+if (false == zombieVersionCompare('2.0.0alpha1', '>=')) {
+  throw new Error("Your zombie.js version is not compatible with this driver. Please use a version >= 2.0.0alpha1");
 }
 
 net.createServer(function (stream) {
@@ -63,7 +136,7 @@ net.createServer(function (stream) {
 
   stream.on('end', function () {
     if (browser == null) {
-      browser = new zombie.Browser();
+      browser = new zombie();
 
       // Clean up old pointers
       pointers = [];
