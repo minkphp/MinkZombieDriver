@@ -11,30 +11,21 @@ You need a working installation of [NodeJS](http://nodejs.org/) and
 [zombie.js](http://zombie.labnotes.org) library through npm:
 
 ``` bash
-npm install -g zombie@0.12.15
+npm install -g zombie
 ```
 
-There are some compatibility issues with newer versions of zombie.js.
+There are some compatibility issues with older versions of zombie.js.
 Some are more or less PHP specific and kinda hard to resolve. If you
-want to be 100% on the safe side, please use __version 0.12.15 or
-lower__. 
-
-Versions > 0.12.15 and < 2.0.0 are almost compatible
-except for some edge cases.
-
-__Versions >= 2.0.0-alpha* (or above) are neither compatible nor
-supported at this
-point of time due to significant changes of the zombie.js API.__ As soon
-as version 2.0 is officially released, we will work on the driver's
-compatibility.
+want to be 100% on the safe side, please use __version 2.0.0-alpha1 or
+higher__.
 
 Use [Composer](http://getcomposer.org/) to install all required PHP dependencies:
 
 ``` json
 {
     "require": {
-        "behat/mink":               "1.4.*",
-        "behat/mink-zombie-driver": "1.0.*"
+        "behat/mink":               "~1.5",
+        "behat/mink-zombie-driver": "~1.0"
     }
 }
 ```
