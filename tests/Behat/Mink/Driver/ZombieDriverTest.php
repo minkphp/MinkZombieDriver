@@ -25,11 +25,6 @@ class ZombieDriverTest extends JavascriptDriverTest
         $this->markTestSkipped('Skipping, until https://github.com/assaf/zombie/issues/614 is fixed');
     }
 
-    public function testCookie()
-    {
-        $this->markTestSkipped('Skipping, until https://github.com/assaf/zombie/issues/613 is fixed');
-    }
-
     public function testVisibility()
     {
         $this->markTestSkipped('Zombie.js doesn\'t support visibility checking');

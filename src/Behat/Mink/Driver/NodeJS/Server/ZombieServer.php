@@ -29,11 +29,16 @@ class ZombieServer extends Server
         $js = <<<'JS'
 var net      = require('net')
   , zombie   = require('%modules_path%zombie')
+  , Tough = require('%modules_path%zombie/node_modules/tough-cookie')
   , browser  = null
   , pointers = []
   , buffer   = ""
   , host     = '%host%'
   , port     = %port%;
+
+Tough.Cookie.prototype.cookieString = function cookieString() {
+  return this.key + '=' + (this.value == null ? '' : this.value);
+};
 
 var zombieVersionCompare = function(v2, op) {
   var version_compare = function (v1, v2, operator) {
