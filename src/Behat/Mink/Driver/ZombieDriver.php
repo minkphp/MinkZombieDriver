@@ -496,7 +496,7 @@ if (tagName == "INPUT") {
     value = node.value;
   }
 } else if (tagName == "TEXTAREA") {
-  value = node.text;
+  value = node.value;
 } else if (tagName == "SELECT") {
   if (node.getAttribute('multiple')) {
     value = [];
@@ -537,18 +537,13 @@ JS;
 
         $js = <<<JS
 var node = {$ref},
-    tagName = node.tagName;
-if (tagName == "TEXTAREA") {
-  node.textContent = {$value};
+    type = node.getAttribute('type');
+if (type == 'checkbox') {
+  {$value} ? browser.check(node) : browser.uncheck(node);
+} else if (type == 'radio') {
+  browser.choose(node);
 } else {
-  var type = node.getAttribute('type');
-  if (type == "checkbox") {
-    {$value} ? browser.check(node) : browser.uncheck(node);
-  } else if (type == "radio") {
-    browser.choose(node);
-  } else {
-    browser.fill(node, {$value});
-  }
+  browser.fill(node, {$value});
 }
 stream.end();
 JS;
