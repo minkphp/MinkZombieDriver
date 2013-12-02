@@ -17,12 +17,9 @@ class ZombieDriverTest extends JavascriptDriverTest
         return new ZombieDriver($server);
     }
 
-    /**
-     * Zombie.js waits until timeout ends before returning control to script (after ->click() call)
-     */
     public function testWait()
     {
-        $this->markTestSkipped('Skipping, until https://github.com/assaf/zombie/issues/614 is fixed');
+        $this->markTestSkipped('Zombie automatically waits for events to fire, so the wait test is irrelevant');
     }
 
     public function testVisibility()
