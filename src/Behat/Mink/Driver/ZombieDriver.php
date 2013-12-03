@@ -244,17 +244,25 @@ JS;
      *
      * @param string $name
      * @param string $value
-     *
-     * @throws UnsupportedDriverActionException
      */
     public function setRequestHeader($name, $value)
     {
+        $nameEscaped = json_encode($name);
+        $valueEscaped = json_encode($value);
+
         if (strtolower($name) === 'user-agent') {
-            $this->server->evalJS("browser.userAgent = '$value';stream.end();");
+            $this->server->evalJS("browser.userAgent = {$valueEscaped};stream.end();");
             return;
         }
 
-        throw new UnsupportedDriverActionException('Request header "' . $name . '" manipulation is not supported by %s', $this);
+        $js = <<<JS
+if (!browser.headers) {
+  browser.headers = {};
+}
+browser.headers[{$nameEscaped}] = {$valueEscaped};
+stream.end();
+JS;
+        $this->server->evalJS($js);
     }
 
     /**
