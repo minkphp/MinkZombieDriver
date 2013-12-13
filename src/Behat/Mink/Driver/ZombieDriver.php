@@ -137,13 +137,8 @@ class ZombieDriver extends CoreDriver
      */
     public function reset()
     {
-        // Cleanup cached references
-        $this->nativeRefs = array();
-
         $js = <<<JS
 browser.deleteCookies();
-browser = null;
-pointers = [];
 stream.end();
 JS;
 
@@ -307,9 +302,13 @@ JS;
         $nameEscaped = json_encode($name);
 
         $js = <<<JS
-var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname};
+var path = browser.window.location.pathname;
 
-browser.deleteCookie(cookieId);
+do {
+    browser.deleteCookie({name: {$nameEscaped}, domain: browser.window.location.hostname, path: path});
+    path = path.replace(/.$/, '');
+} while (path);
+
 stream.end();
 JS;
 
