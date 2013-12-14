@@ -1,7 +1,9 @@
 Mink Zombie.js Driver
 =====================
 
-- [![Build Status](https://secure.travis-ci.org/Behat/MinkZombieDriver.png?branch=master)](http://travis-ci.org/Behat/MinkZombieDriver)
+[![Latest Stable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/stable.png)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![Total Downloads](https://poser.pugx.org/behat/mink-zombie-driver/downloads.png)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![Build Status](https://secure.travis-ci.org/Behat/MinkZombieDriver.png?branch=master)](http://travis-ci.org/Behat/MinkZombieDriver)
 
 Installation & Compatibility
 ----------------------------
