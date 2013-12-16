@@ -74,9 +74,11 @@ class Connection
         if (false === @socket_connect($socket, $this->host, $this->port)) {
             $errno = socket_last_error();
             throw new \RuntimeException(
-              sprintf("Could not establish connection: %s (%s)",
-              socket_strerror($errno),
-              $errno)
+                sprintf(
+                    "Could not establish connection: %s (%s)",
+                    socket_strerror($errno),
+                    $errno
+                )
             );
         }
 
@@ -84,7 +86,7 @@ class Connection
         socket_shutdown($socket, 1);
 
         $out = '';
-        while($o = socket_read($socket, 2048)) {
+        while ($o = socket_read($socket, 2048)) {
             $out .= $o;
         }
 

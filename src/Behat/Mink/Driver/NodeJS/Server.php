@@ -73,14 +73,13 @@ abstract class Server
      * @param  string  $nodeModulesPath  Path to node_modules directory
      */
     public function __construct(
-        $host            = '127.0.0.1',
-        $port            = 8124,
-        $nodeBin         = null,
-        $serverPath      = null,
-        $threshold       = 2000000,
+        $host = '127.0.0.1',
+        $port = 8124,
+        $nodeBin = null,
+        $serverPath = null,
+        $threshold = 2000000,
         $nodeModulesPath = ''
-    )
-    {
+    ) {
         if (null === $nodeBin) {
             $nodeBin = 'node';
         }
@@ -180,7 +179,8 @@ abstract class Server
     {
         if (!is_dir($nodeModulesPath) || !preg_match('/\/$/', $nodeModulesPath)) {
             throw new \InvalidArgumentException(sprintf(
-                "Node modules path '%s' is not a directory and/or does not end with a trailing '/'", $nodeModulesPath
+                "Node modules path '%s' is not a directory and/or does not end with a trailing '/'",
+                $nodeModulesPath
             ));
         }
         $this->nodeModulesPath = $nodeModulesPath;
@@ -269,7 +269,8 @@ abstract class Server
         // Check if the server script exists at given path
         if (false === $this->serverPath || false === is_file($this->serverPath)) {
             throw new \RuntimeException(sprintf(
-                "Could not find server script at path '%s'", $this->serverPath
+                "Could not find server script at path '%s'",
+                $this->serverPath
             ));
         }
 
@@ -391,16 +392,14 @@ abstract class Server
     {
         if (null === $this->connection) {
             if (null === $this->process) {
-                throw new \RuntimeException(
-                    "No connection available. Did you start the server?"
-                  );
+                throw new \RuntimeException("No connection available. Did you start the server?");
             }
             if ($this->process->isRunning()) {
-              $this->stop();
-              throw new \RuntimeException(sprintf(
-                  "Server did not respond in time: (%s) [Stopped]",
-                  $this->process->getExitCode()
-              ));
+                $this->stop();
+                throw new \RuntimeException(sprintf(
+                    "Server did not respond in time: (%s) [Stopped]",
+                    $this->process->getExitCode()
+                ));
             }
         }
         if (!$this->process->isRunning()) {

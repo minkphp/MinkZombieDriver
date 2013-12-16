@@ -3,11 +3,9 @@
 namespace Behat\Mink\Driver;
 
 use Behat\Mink\Driver\NodeJS\Server\ZombieServer;
-
-use Behat\Mink\Session,
-    Behat\Mink\Element\NodeElement,
-    Behat\Mink\Exception\DriverException,
-    Behat\Mink\Exception\UnsupportedDriverActionException;
+use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Exception\DriverException;
+use Behat\Mink\Session;
 
 /*
  * This file is part of the Behat\Mink.
@@ -56,10 +54,8 @@ class ZombieDriver extends CoreDriver
             $this->server = $first;
 
             return;
-        } else if (is_object($first)) {
-            throw new \InvalidArgumentException(
-                "Invalid first argument"
-            );
+        } elseif (is_object($first)) {
+            throw new \InvalidArgumentException('Invalid first argument');
         }
 
         $params = array();
@@ -638,14 +634,14 @@ JS;
     *
     * @return boolean
     */
-   public function isSelected($xpath)
-   {
-       if (!$ref = $this->getNativeRefForXPath($xpath)) {
-           return false;
-       }
+    public function isSelected($xpath)
+    {
+        if (!$ref = $this->getNativeRefForXPath($xpath)) {
+            return false;
+        }
 
-       return (boolean)$this->server->evalJS("{$ref}.selected", 'json');
-   }
+        return (boolean)$this->server->evalJS("{$ref}.selected", 'json');
+    }
 
     /**
      * Clicks button or link located by it's XPath query.
@@ -955,4 +951,3 @@ JS;
         return sprintf('pointers[%s]', $this->nativeRefs[$hash]);
     }
 }
-

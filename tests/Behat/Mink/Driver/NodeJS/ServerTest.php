@@ -179,8 +179,8 @@ JS;
         try {
             $server->start($process);
             $this->assertInstanceOf(
-              'Behat\Mink\Driver\NodeJS\Connection',
-              $server->getConnection()
+                'Behat\Mink\Driver\NodeJS\Connection',
+                $server->getConnection()
             );
         } catch (\RuntimeException $ex) {
             $this->fail('No exception should have been thrown here');
@@ -220,7 +220,9 @@ JS;
         $process = $this->getTerminatedServerProcessMock();
         try {
             $server->start($process);
-        } catch (\RuntimeException $ex) {}
+        } catch (\RuntimeException $ex) {
+            // ignore error
+        }
 
         $this->assertFalse($server->isRunning());
     }

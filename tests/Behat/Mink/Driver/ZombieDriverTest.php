@@ -2,8 +2,8 @@
 
 namespace Tests\Behat\Mink\Driver;
 
-use Behat\Mink\Driver\ZombieDriver,
-    Behat\Mink\Driver\NodeJS\Server\ZombieServer;
+use Behat\Mink\Driver\NodeJS\Server\ZombieServer;
+use Behat\Mink\Driver\ZombieDriver;
 
 /**
  * @group zombiedriver
