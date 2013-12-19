@@ -481,9 +481,9 @@ JS;
 
         $js = <<<JS
 var node = {$ref},
-    tagName = node.tagName,
+    tagName = node.tagName.toLowerCase(),
     value = null;
-if (tagName == "INPUT") {
+if (tagName == "input") {
   var type = node.getAttribute('type').toLowerCase();
   if (type == "checkbox") {
     value = node.checked;
@@ -498,9 +498,9 @@ if (tagName == "INPUT") {
   } else {
     value = node.value;
   }
-} else if (tagName == "TEXTAREA") {
+} else if (tagName == "textarea") {
   value = node.value;
-} else if (tagName == "SELECT") {
+} else if (tagName == "select") {
   if (node.getAttribute('multiple')) {
     value = [];
     for (var i = 0; i < node.options.length; i++) {
@@ -613,10 +613,10 @@ JS;
         $value = json_encode($value);
         $js = <<<JS
 var node = {$ref},
-    tagName = node.tagName;
-if (tagName == "SELECT") {
+    tagName = node.tagName.toLowerCase();
+if (tagName == "select") {
   browser.select(node, {$value});
-} else if (tagName == "INPUT") {
+} else if (tagName == "input") {
   var type = node.getAttribute('type');
   if (type == "radio") {
     browser.choose(node);
