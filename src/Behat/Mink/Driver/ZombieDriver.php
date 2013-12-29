@@ -11,9 +11,7 @@
 namespace Behat\Mink\Driver;
 
 use Behat\Mink\Driver\NodeJS\Server\ZombieServer;
-use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\DriverException;
-use Behat\Mink\Session;
 
 /**
  * Zombie (JS) driver.
@@ -22,10 +20,6 @@ use Behat\Mink\Session;
  */
 class ZombieDriver extends CoreDriver
 {
-    /**
-     * @var Session
-     */
-    private $session;
     private $started = false;
     private $nativeRefs = array();
     private $server = null;
@@ -59,14 +53,6 @@ class ZombieDriver extends CoreDriver
     public function getServer()
     {
         return $this->server;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSession(Session $session)
-    {
-        $this->session = $session;
     }
 
     /**
@@ -344,7 +330,7 @@ JS;
         foreach ($refs as $i => $ref) {
             $subXpath = sprintf('(%s)[%d]', $xpath, $i + 1);
             $this->nativeRefs[md5($subXpath)] = $ref;
-            $elements[] = new NodeElement($subXpath, $this->session);
+            $elements[] = $subXpath;
 
             // first node ref also matches the original xpath
             if (0 === $i) {
