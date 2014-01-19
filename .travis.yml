@@ -19,4 +19,8 @@ before_script:
   - export NODE_PATH="$(pwd)/node_modules"
   - export PATH="/usr/local/share/npm/bin:$PATH"
 
-script: phpunit -v
+script: phpunit -v --coverage-clover=coverage.clover
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
