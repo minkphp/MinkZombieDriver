@@ -1,17 +1,17 @@
 language: php
 
-php: [5.3, 5.4, 5.5]
+php: [5.3, 5.4, 5.5, hhvm]
 
-env:
-  - PROCESS_VERSION='2.1.*'
-  - PROCESS_VERSION='2.2.*'
+matrix:
+  allow_failures:
+    - php: hhvm
+  fast_finish: true
 
 before_script:
   - export WEB_FIXTURES_HOST=http://localhost
   - export WEB_FIXTURES_BROWSER=firefox
 
   # Install deps
-  - composer require --no-update symfony/process=$PROCESS_VERSION
   - composer install --dev --prefer-source
 
   - sudo apt-get update > /dev/null
