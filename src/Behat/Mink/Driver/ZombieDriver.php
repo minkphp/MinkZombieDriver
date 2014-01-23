@@ -156,11 +156,13 @@ JS;
         $js = <<<JS
 pointers = [];
 browser.visit("{$url}", function(err) {
-  if (err) {
-    stream.end(JSON.stringify(err.stack));
-  } else {
-    stream.end();
-  }
+  browser.wait(function() {
+    if (err) {
+      stream.end(JSON.stringify(err.stack));
+    } else {
+      stream.end();
+    }
+  });
 });
 JS;
         $this->server->evalJS($js);
