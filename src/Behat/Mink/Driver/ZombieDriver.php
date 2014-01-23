@@ -353,7 +353,7 @@ JS;
      */
     public function getContent()
     {
-        return html_entity_decode($this->server->evalJS('browser.html()', 'json'));
+        return $this->server->evalJS('browser.html()', 'json');
     }
 
     /**
