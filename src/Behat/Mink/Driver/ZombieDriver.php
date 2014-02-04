@@ -798,6 +798,13 @@ JS;
      */
     public function evaluateScript($script)
     {
+        $script = preg_replace('/^return\s+/', '', $script);
+
+        if (preg_match('/^function[\s\(]/', $script)) {
+            $script = preg_replace('/;$/', '', $script);
+            $script = '(' . $script . ')';
+        }
+
         $script = json_encode($script);
         return $this->server->evalJS("browser.evaluate({$script})", 'json');
     }
