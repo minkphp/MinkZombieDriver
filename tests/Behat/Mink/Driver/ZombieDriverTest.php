@@ -42,6 +42,21 @@ class ZombieDriverTest extends JavascriptDriverTest
         $this->markTestSkipped('Zombie.js doesn\'t support iFrames switching');
     }
 
+    public function testHtml5FormInputAttribute()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635');
+    }
+
+    public function testHtml5FormButtonAttribute()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635');
+    }
+
+    public function testHtml5FormOutside()
+    {
+        $this->markTestSkipped('Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635');
+    }
+
     public function testSetUserAgent()
     {
         $session = $this->getSession();
