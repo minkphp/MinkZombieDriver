@@ -785,6 +785,11 @@ JS;
      */
     public function executeScript($script)
     {
+        if (preg_match('/^function[\s\(]/', $script)) {
+            $script = preg_replace('/;$/', '', $script);
+            $script = '(' . $script . ')';
+        }
+
         $script = json_encode($script);
         $this->server->evalJS("browser.evaluate({$script});stream.end();");
     }
