@@ -786,7 +786,7 @@ JS;
     public function executeScript($script)
     {
         $script = json_encode($script);
-        $this->server->evalJS("browser.evaluate({$script})");
+        $this->server->evalJS("browser.evaluate({$script});stream.end();");
     }
 
     /**
