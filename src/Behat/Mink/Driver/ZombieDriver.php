@@ -824,25 +824,19 @@ JS;
      */
     public function wait($time, $condition)
     {
-        $js = <<<JS
-browser.waitDuration = {$time};
-
-browser.wait(function(window) {
-    with(window) {
-        return {$condition};
-    }
-}, null)
-.done(function() {
-    stream.end();
-});
-JS;
-        $this->server->evalJS($js);
+        $conditionEscaped = json_encode($condition);
 
         $js = <<<JS
-with(browser.window) {
-    var conditionResult = {$condition};
-}
-stream.end(JSON.stringify(conditionResult));
+(function () {
+  var checkCondition = function() {
+    return browser.evaluate($conditionEscaped);
+  };
+
+  browser.waitDuration = {$time};
+  browser.wait(checkCondition).then(function () {
+    stream.end(JSON.stringify(checkCondition()));
+  });
+}());
 JS;
 
         return json_decode($this->server->evalJS($js));
