@@ -817,12 +817,12 @@ JS;
     /**
      * Waits some time or until JS condition turns true.
      *
-     * @param integer $time      time in milliseconds
+     * @param integer $timeout   timeout in milliseconds
      * @param string  $condition JS condition
      *
      * @return boolean
      */
-    public function wait($time, $condition)
+    public function wait($timeout, $condition)
     {
         $conditionEscaped = json_encode($condition);
 
@@ -832,7 +832,7 @@ JS;
     return browser.evaluate($conditionEscaped);
   };
 
-  browser.waitDuration = {$time};
+  browser.waitDuration = {$timeout};
   browser.wait(checkCondition).then(function () {
     stream.end(JSON.stringify(checkCondition()));
   });
