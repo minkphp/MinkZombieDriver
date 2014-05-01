@@ -10,40 +10,38 @@
 
 namespace Behat\Mink\Driver\NodeJS;
 
-use Behat\Mink\Driver\NodeJS\Connection;
 use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\Process;
 
 /**
  * Abstract base class to start and connect to a NodeJS server process.
  *
- * @author      Pascal Cremer <b00gizm@gmail.com>
+ * @author Pascal Cremer <b00gizm@gmail.com>
  */
-
 abstract class Server
 {
     /**
-     * @var     string
+     * @var string
      */
     protected $host;
 
     /**
-     * @var     int
+     * @var int
      */
     protected $port;
 
     /**
-     * @var     string
+     * @var string
      */
     protected $nodeBin;
 
     /**
-     * @var     string
+     * @var string
      */
     protected $serverPath;
 
     /**
-     * @var     int
+     * @var int
      */
     protected $threshold;
 
@@ -53,24 +51,24 @@ abstract class Server
     protected $nodeModulesPath;
 
     /**
-     * @var     \Symfony\Component\Process\Process
+     * @var Process
      */
     protected $process;
 
     /**
-     * @var     \Behat\Mink\Driver\NodeJS\Connection
+     * @var Connection
      */
     protected $connection;
 
     /**
      * Constructor
      *
-     * @param  string  $host             The server host
-     * @param  int     $port             The server port
-     * @param  string  $nodeBin          Path to NodeJS binary
-     * @param  string  $serverPath       Path to server script
-     * @param  int     $threshold        Threshold value in micro seconds
-     * @param  string  $nodeModulesPath  Path to node_modules directory
+     * @param string $host            The server host
+     * @param int    $port            The server port
+     * @param string $nodeBin         Path to NodeJS binary
+     * @param string $serverPath      Path to server script
+     * @param int    $threshold       Threshold value in micro seconds
+     * @param string $nodeModulesPath Path to node_modules directory
      */
     public function __construct(
         $host = '127.0.0.1',
@@ -95,8 +93,6 @@ abstract class Server
 
         $this->serverPath      = $serverPath;
         $this->threshold       = intval($threshold);
-        $this->process         = null;
-        $this->connection      = null;
     }
 
     /**
@@ -112,7 +108,7 @@ abstract class Server
     /**
      * Setter host
      *
-     * @param   string  $host  The server host
+     * @param string $host The server host
      */
     public function setHost($host)
     {
@@ -122,7 +118,7 @@ abstract class Server
     /**
      * Getter host
      *
-     * @return  string  The server host
+     * @return string The server host
      */
     public function getHost()
     {
@@ -132,7 +128,7 @@ abstract class Server
     /**
      * Setter port
      *
-     * @param   int  $port  The server port
+     * @param int $port The server port
      */
     public function setPort($port)
     {
@@ -142,7 +138,7 @@ abstract class Server
     /**
      * Getter port
      *
-     * @return  int  The server port
+     * @return int The server port
      */
     public function getPort()
     {
@@ -152,7 +148,7 @@ abstract class Server
     /**
      * Setter NodeJS binary path
      *
-     * @param   string  $nodeBin  Path to NodeJS binary
+     * @param string $nodeBin Path to NodeJS binary
      */
     public function setNodeBin($nodeBin)
     {
@@ -162,7 +158,7 @@ abstract class Server
     /**
      * Getter NodeJS binary path
      *
-     * @return  string  Path to NodeJS binary
+     * @return string Path to NodeJS binary
      */
     public function getNodeBin()
     {
@@ -172,8 +168,8 @@ abstract class Server
     /**
      * Setter NodeJS modules path
      *
-     * @param   string  $nodeModulesPath  Path to NodeJS modules.
-     * @throws  \InvalidArgumentException Invalid path
+     * @param  string                    $nodeModulesPath Path to NodeJS modules.
+     * @throws \InvalidArgumentException Invalid path
      */
     public function setNodeModulesPath($nodeModulesPath)
     {
@@ -190,7 +186,7 @@ abstract class Server
     /**
      * Getter NodeJS modules path.
      *
-     * @return  string  Path to NodeJS binary.
+     * @return string Path to NodeJS binary.
      */
     public function getNodeModulesPath()
     {
@@ -200,7 +196,7 @@ abstract class Server
     /**
      * Setter server script path
      *
-     * @param   string  $serverPath  Path to server script
+     * @param string $serverPath Path to server script
      */
     public function setServerPath($serverPath)
     {
@@ -210,7 +206,7 @@ abstract class Server
     /**
      * Getter server script path
      *
-     * @return  string  Path to server script
+     * @return string Path to server script
      */
     public function getServerPath()
     {
@@ -220,7 +216,7 @@ abstract class Server
     /**
      * Setter threshold value
      *
-     * @param   int  $threshold  Threshold value in micro seconds
+     * @param int $threshold Threshold value in micro seconds
      */
     public function setThreshold($threshold)
     {
@@ -230,7 +226,7 @@ abstract class Server
     /**
      * Getter threshold value
      *
-     * @return  int  Threshold value in micro seconds
+     * @return int Threshold value in micro seconds
      */
     public function getThreshold()
     {
@@ -240,7 +236,7 @@ abstract class Server
     /**
      * Getter process object
      *
-     * @return  \Symfony\Component\Process\Process  The process object
+     * @return Process The process object
      */
     public function getProcess()
     {
@@ -250,7 +246,7 @@ abstract class Server
     /**
      * Getter connection object
      *
-     * @return  \Behat\Mink\Driver\NodeJS\Connection
+     * @return Connection
      */
     public function getConnection()
     {
@@ -260,9 +256,9 @@ abstract class Server
     /**
      * Starts the server process
      *
-     * @param   \Symfony\Component\Process\Process  $process  A process object
+     * @param Process $process A process object
      *
-     * @throws  \RuntimeException
+     * @throws \RuntimeException
      */
     public function start(Process $process = null)
     {
@@ -306,7 +302,7 @@ abstract class Server
 
     /**
      * Stops the server process
-     * @link    https://github.com/symfony/Process
+     * @link https://github.com/symfony/Process
      */
     public function stop()
     {
@@ -330,7 +326,7 @@ abstract class Server
     /**
      * Restarts the server process
      *
-     * @param \Symfony\Component\Process\Process  $process  A process object
+     * @param Process $process A process object
      */
     public function restart(Process $process = null)
     {
@@ -341,7 +337,9 @@ abstract class Server
     /**
      * Checks if the server process is running
      *
-     * @link    https://github.com/symfony/Process
+     * @link https://github.com/symfony/Process
+     *
+     * @return bool
      */
     public function isRunning()
     {
@@ -353,14 +351,13 @@ abstract class Server
     }
 
     /**
-     * Checks the availabilty of the server triggers the evaluation
+     * Checks the availability of the server triggers the evaluation
      * of a string of JavaScript code by {{Behat\Mink\Driver\NodeJS\Server::doEvalJS()}}
      *
-     * @param   string  $str  String of JavaScript code
-     * @param   string  $returnType  Whether it should be eval'ed as
-     *                               JavaScript or wrapped in a JSON response
+     * @param string $str        String of JavaScript code
+     * @param string $returnType Whether it should be eval'ed as JavaScript or wrapped in a JSON response
      *
-     * @return  string  The eval'ed response
+     * @return mixed The eval'ed response
      */
     public function evalJS($str, $returnType = 'js')
     {
@@ -374,11 +371,12 @@ abstract class Server
      * JavaScript code for evaluation by the server and sending it over
      * the server connection socket
      *
-     * @param   \Behat\Mink\Driver\NodeJS\Connection  $conn        The server connection
-     * @param   string                                $str         String of JavaScript code
-     * @param   string                                $returnType  The return type
+     * @param Connection $conn       The server connection
+     * @param string     $str        String of JavaScript code
+     * @param string     $returnType The return type
      *
-     * @return  string  The eval'ed response
+     * @return mixed The eval'ed response
+     *
      * @throws \InvalidArgumentException When unsupported $returnType given.
      */
     abstract protected function doEvalJS(Connection $conn, $str, $returnType = 'js');
@@ -387,19 +385,19 @@ abstract class Server
      * Checks whether server connection and server process are still available
      * and running
      *
-     * @throws  \RuntimeException
+     * @throws \RuntimeException
      */
     protected function checkAvailability()
     {
         if (null === $this->connection) {
             if (null === $this->process) {
-                throw new \RuntimeException("No connection available. Did you start the server?");
+                throw new \RuntimeException('No connection available. Did you start the server?');
             }
 
             if ($this->process->isRunning()) {
                 $this->stop();
                 throw new \RuntimeException(sprintf(
-                    "Server did not respond in time: (%s) [Stopped]",
+                    'Server did not respond in time: (%s) [Stopped]',
                     $this->process->getExitCode()
                 ));
             }
@@ -407,7 +405,7 @@ abstract class Server
 
         if (!$this->process->isRunning()) {
             throw new \RuntimeException(sprintf(
-                "Server process has been terminated: (%s) [%s]",
+                'Server process has been terminated: (%s) [%s]',
                 $this->process->getExitCode(),
                 $this->process->getErrorOutput()
             ));
@@ -417,7 +415,7 @@ abstract class Server
     /**
      * Creates a temporary server script
      *
-     * @return  string  Path to the temporary server script
+     * @return string Path to the temporary server script
      */
     protected function createTemporaryServer()
     {
@@ -437,7 +435,7 @@ abstract class Server
      * Inherited classes will implement this method to provide the JavaScript
      * code which powers the server script
      *
-     * @return  string  The server's JavaScript code
+     * @return string The server's JavaScript code
      */
     abstract protected function getServerScript();
 }

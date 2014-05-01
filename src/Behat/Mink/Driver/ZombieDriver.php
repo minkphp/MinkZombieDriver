@@ -125,7 +125,7 @@ JS;
 
         $js = <<<JS
 pointers = [];
-browser.visit("{$url}", function(err) {
+browser.visit("{$url}", function (err) {
   if (err) {
     stream.end(JSON.stringify(err.stack));
   } else {
@@ -157,7 +157,7 @@ JS;
      */
     public function forward()
     {
-        $this->server->evalJS("browser.window.history.forward(); browser.wait(function() { stream.end(); })");
+        $this->server->evalJS("browser.window.history.forward(); browser.wait(function () { stream.end(); })");
         $this->nativeRefs = array();
     }
 
@@ -166,7 +166,7 @@ JS;
      */
     public function back()
     {
-        $this->server->evalJS("browser.window.history.back(); browser.wait(function() { stream.end(); })");
+        $this->server->evalJS("browser.window.history.back(); browser.wait(function () { stream.end(); })");
         $this->nativeRefs = array();
     }
 
@@ -211,6 +211,7 @@ JS;
 
         if (strtolower($name) === 'user-agent') {
             $this->server->evalJS("browser.userAgent = {$valueEscaped};stream.end();");
+
             return;
         }
 
@@ -229,7 +230,7 @@ JS;
      */
     public function getResponseHeaders()
     {
-        return (array)$this->server->evalJS('browser.window._response.headers', 'json');
+        return (array) $this->server->evalJS('browser.window._response.headers', 'json');
     }
 
     /**
@@ -300,7 +301,7 @@ JS;
      */
     public function getStatusCode()
     {
-        return (int)$this->server->evalJS('browser.statusCode', 'json');
+        return (int) $this->server->evalJS('browser.statusCode', 'json');
     }
 
     /**
@@ -441,6 +442,7 @@ if (tagName == "input") {
 }
 stream.end(JSON.stringify(value));
 JS;
+
         return json_decode($this->server->evalJS($js));
     }
 
@@ -666,7 +668,7 @@ JS;
 
         $js = <<<JS
 (function () {
-  var checkCondition = function() {
+  var checkCondition = function () {
     return browser.evaluate($conditionEscaped);
   };
 
@@ -714,7 +716,7 @@ JS;
         $ref = $this->getNativeRefForXPath($xpath);
 
         $js = <<<JS
-browser.fire({$ref}, "{$event}", function(err) {
+browser.fire({$ref}, "{$event}", function (err) {
   if (err) {
     stream.end(JSON.stringify(err.stack));
   } else {

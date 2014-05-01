@@ -1,7 +1,5 @@
 <?php
 
-namespace Behat\Mink\Driver\NodeJS;
-
 /*
  * This file is part of the Behat\Mink.
  * (c) Konstantin Kudryashov <ever.zet@gmail.com>
@@ -10,12 +8,13 @@ namespace Behat\Mink\Driver\NodeJS;
  * file that was distributed with this source code.
  */
 
+namespace Behat\Mink\Driver\NodeJS;
+
 /**
  * The connection to the node TCP server.
  *
- * @author      Pascal Cremer <b00gizm@gmail.com>
+ * @author Pascal Cremer <b00gizm@gmail.com>
  */
-
 class Connection
 {
     /**
@@ -31,8 +30,8 @@ class Connection
     /**
      * Initializes connection instance.
      *
-     * @param   string  $host   zombie.js server host
-     * @param   integer $port   zombie.js server port
+     * @param string  $host zombie.js server host
+     * @param integer $port zombie.js server port
      */
     public function __construct($host = '127.0.0.1', $port = 8124)
     {
@@ -43,7 +42,7 @@ class Connection
     /**
      * Returns connection host.
      *
-     * @return  string
+     * @return string
      */
     public function getHost()
     {
@@ -53,7 +52,7 @@ class Connection
     /**
      * Returns connection port.
      *
-     * @return  string
+     * @return int
      */
     public function getPort()
     {
@@ -63,10 +62,11 @@ class Connection
     /**
      * Sends a payload string of Javascript code to the Zombie Node.js server.
      *
-     * @param   string  $js   String of Javascript code
+     * @param string $js String of Javascript code
      *
-     * @throws  \RuntimeException Could not establish connection
-     * @return  string
+     * @return string
+     *
+     * @throws \RuntimeException Could not establish connection
      */
     public function socketSend($js)
     {
