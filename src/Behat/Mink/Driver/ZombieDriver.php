@@ -512,11 +512,10 @@ var node = {$ref},
     tagName = node.tagName.toLowerCase();
 if (tagName == "select") {
   browser.select(node, {$value});
-} else if (tagName == "input") {
-  var type = node.getAttribute('type');
-  if (type == "radio") {
-    browser.choose(node);
-  }
+} else if (tagName == "input" && node.getAttribute('type') == 'radio') {
+  browser.choose(node);
+} else {
+  throw 'The element is not a select or radio input';
 }
 stream.end();
 JS;
