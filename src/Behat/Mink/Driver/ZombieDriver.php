@@ -99,6 +99,7 @@ class ZombieDriver extends CoreDriver
         }
 
         $this->started = false;
+        $this->nativeRefs = array();
     }
 
     /**
@@ -157,6 +158,7 @@ JS;
     public function forward()
     {
         $this->server->evalJS("browser.window.history.forward(); browser.wait(function() { stream.end(); })");
+        $this->nativeRefs = array();
     }
 
     /**
@@ -165,6 +167,7 @@ JS;
     public function back()
     {
         $this->server->evalJS("browser.window.history.back(); browser.wait(function() { stream.end(); })");
+        $this->nativeRefs = array();
     }
 
     /**
@@ -547,6 +550,10 @@ JS;
         }
 
         $this->triggerBrowserEvent('click', $xpath);
+        // Resets the cached references as the click action can go to a different page
+        // This ensures we don't have outdated refs on the new page if the same XPath is requested
+        // at the expense of loosing the know reference in case the click does not change page
+        $this->nativeRefs = array();
     }
 
     /**
@@ -694,6 +701,7 @@ JS;
         $ref = $this->getNativeRefForXPath($xpath);
 
         $this->server->evalJS("{$ref}.submit();stream.end();");
+        $this->nativeRefs = array();
     }
 
     /**
