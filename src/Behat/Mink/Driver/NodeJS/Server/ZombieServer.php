@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of the Behat\Mink.
+ * (c) Konstantin Kudryashov <ever.zet@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Behat\Mink\Driver\NodeJS\Server;
 
 use Behat\Mink\Driver\NodeJS\Connection;
@@ -64,7 +72,7 @@ Tough.Cookie.prototype.cookieString = function cookieString() {
   return this.key + '=' + (this.value == null ? '' : this.value);
 };
 
-var zombieVersionCompare = function(v2, op) {
+var zombieVersionCompare = function (v2, op) {
   var version_compare = function (v1, v2, operator) {
     var i = 0,
         x = 0,
@@ -174,13 +182,12 @@ net.createServer(function (stream) {
     try {
       eval(buffer);
       buffer = '';
-    }
-    catch (e) {
+    } catch (e) {
       buffer = '';
       stream.end('{$errorPrefix}' + JSON.stringify(e.message));
     }
   });
-}).listen(port, host, function() {
+}).listen(port, host, function () {
   console.log('server started on ' + host + ':' + port);
 });
 JS;
