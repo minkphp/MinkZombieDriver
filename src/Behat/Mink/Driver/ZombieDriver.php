@@ -348,9 +348,7 @@ JS;
      */
     public function getTagName($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return null;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         return strtolower($this->server->evalJS("{$ref}.tagName", 'json'));
     }
@@ -360,9 +358,7 @@ JS;
      */
     public function getText($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return null;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         return trim($this->server->evalJS("{$ref}.textContent.replace(/\s+/g, ' ')", 'json'));
     }
@@ -372,9 +368,7 @@ JS;
      */
     public function getHtml($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return null;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         return $this->server->evalJS("{$ref}.innerHTML", 'json');
     }
@@ -384,9 +378,7 @@ JS;
      */
     public function getAttribute($xpath, $name)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return null;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         return $this->server->evalJS("{$ref}.getAttribute('{$name}')", 'json');
     }
@@ -396,9 +388,7 @@ JS;
      */
     public function getValue($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return null;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $js = <<<JS
 var node = {$ref},
@@ -450,9 +440,7 @@ JS;
      */
     public function setValue($xpath, $value)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $value = json_encode($value);
 
@@ -476,9 +464,7 @@ JS;
      */
     public function check($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $this->server->evalJS("browser.check({$ref});stream.end();");
     }
@@ -488,9 +474,7 @@ JS;
      */
     public function uncheck($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $this->server->evalJS("browser.uncheck({$ref});stream.end();");
     }
@@ -500,11 +484,9 @@ JS;
      */
     public function isChecked($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return false;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
-        return (boolean)$this->server->evalJS("{$ref}.checked", 'json');
+        return (boolean) $this->server->evalJS("{$ref}.checked", 'json');
     }
 
     /**
@@ -512,10 +494,7 @@ JS;
      */
     public function selectOption($xpath, $value, $multiple = false)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
-
+        $ref = $this->getNativeRefForXPath($xpath);
         $value = json_encode($value);
         $js = <<<JS
 var node = {$ref},
@@ -538,11 +517,9 @@ JS;
      */
     public function isSelected($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return false;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
-        return (boolean)$this->server->evalJS("{$ref}.selected", 'json');
+        return (boolean) $this->server->evalJS("{$ref}.selected", 'json');
     }
 
     /**
@@ -550,9 +527,7 @@ JS;
      */
     public function click($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $js = <<<JS
 var node    = {$ref},
@@ -595,10 +570,7 @@ JS;
      */
     public function attachFile($xpath, $path)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
-
+        $ref = $this->getNativeRefForXPath($xpath);
         $path = json_encode($path);
         $this->server->evalJS("browser.attach({$ref}, {$path});stream.end();");
     }
@@ -719,9 +691,7 @@ JS;
      */
     public function submitForm($xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $this->server->evalJS("{$ref}.submit();stream.end();");
     }
@@ -736,9 +706,7 @@ JS;
      */
     protected function triggerBrowserEvent($event, $xpath)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $js = <<<JS
 browser.fire({$ref}, "{$event}", function(err) {
@@ -765,9 +733,7 @@ JS;
      */
     protected function triggerKeyEvent($name, $xpath, $char, $modifier)
     {
-        if (!$ref = $this->getNativeRefForXPath($xpath)) {
-            return;
-        }
+        $ref = $this->getNativeRefForXPath($xpath);
 
         $char = is_numeric($char) ? $char : ord($char);
 
@@ -802,15 +768,17 @@ JS;
      *
      * @param string $xpath
      *
-     * @return string|null
+     * @return string
+     *
+     * @throws DriverException when there is no element matching the XPath
      */
     protected function getNativeRefForXPath($xpath)
     {
         $hash = md5($xpath);
         if (!isset($this->nativeRefs[$hash])) {
             $res = $this->find($xpath);
-            if (1 > count($res)) {
-                return null;
+            if (empty($res)) {
+                throw new DriverException(sprintf('There is no element matching XPath "%s"', $xpath));
             }
         }
 
