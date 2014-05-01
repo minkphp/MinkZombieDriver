@@ -33,45 +33,22 @@ class ZombieDriver extends CoreDriver
     /**
      * Constructor.
      *
-     * @param   mixed $v,...  Either the connection parameters for creating
-     *                        the server
-     *                          string  $host - The server's host
-     *                          int     $port - The port to connect to
-     *                        or a valid ZombieServer object instance
+     * @param ZombieServer|string $serverOrHost A server instance, or the host to connect to
+     * @param int|null            $port         The port to connect to when using the host (default to 8124)
      */
-    public function __construct()
+    public function __construct($serverOrHost, $port = null)
     {
-        $numArgs = func_num_args();
-        if (0 === $numArgs) {
-            throw new \InvalidArgumentException(
-                "You must either provide connection parameters or a ZombieServer object"
-            );
-        }
-
-        $argList = func_get_args();
-        $first = array_shift($argList);
-        if ($first instanceof ZombieServer) {
-            $this->server = $first;
+        if ($serverOrHost instanceof ZombieServer) {
+            $this->server = $serverOrHost;
 
             return;
-        } elseif (is_object($first)) {
-            throw new \InvalidArgumentException('Invalid first argument');
         }
 
-        $params = array();
-        $params['host'] = (string)$first;
-
-        $second = array_shift($argList);
-        if (null !== $second) {
-            $params['port'] = intval($second);
+        if (null === $port) {
+            $port = 8124;
         }
 
-        $params = array_replace(array(
-            'host' => '127.0.0.1',
-            'port' => 8124,
-        ), $params);
-
-        $this->server = new ZombieServer($params['host'], $params['port']);
+        $this->server = new ZombieServer((string) $serverOrHost, $port);
     }
 
     /**
