@@ -257,7 +257,7 @@ JS;
         $this->server->evalJS($js);
     }
 
-    protected function deleteCookie($name)
+    private function deleteCookie($name)
     {
         $nameEscaped = json_encode($name);
 
