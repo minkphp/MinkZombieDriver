@@ -172,6 +172,12 @@ JS;
      */
     public function setBasicAuth($user, $password)
     {
+        if (false === $user) {
+            $this->server->evalJS("browser.authenticate().reset();stream.end();");
+
+            return;
+        }
+
         $userEscaped = json_encode($user);
         $passwordEscaped = json_encode($password);
 
