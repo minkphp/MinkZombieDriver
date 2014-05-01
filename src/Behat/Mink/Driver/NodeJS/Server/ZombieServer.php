@@ -4,35 +4,59 @@ namespace Behat\Mink\Driver\NodeJS\Server;
 
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server;
+use Behat\Mink\Exception\DriverException;
 
 class ZombieServer extends Server
 {
+    const ERROR_PREFIX = 'CAUGHT_ERROR:';
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doEvalJS(Connection $conn, $str, $returnType = 'js')
     {
-        $result = null;
         switch ($returnType) {
             case 'js':
                 $result = $conn->socketSend($str);
                 break;
+
             case 'json':
-                $result = json_decode($conn->socketSend("stream.end(JSON.stringify({$str}))"));
+                $result = $conn->socketSend("stream.end(JSON.stringify({$str}))");
                 break;
+
             default:
-                break;
+                throw new \InvalidArgumentException(sprintf('Invalid return type "%s"', $returnType));
+        }
+
+        $errorPrefixLength = strlen(self::ERROR_PREFIX);
+
+        if (self::ERROR_PREFIX === substr($result, 0, $errorPrefixLength)) {
+            $errorMessage = json_decode(substr($result, $errorPrefixLength), true);
+
+            throw new DriverException(sprintf('Error "%s" while executing code: %s', $errorMessage, $str));
+        }
+
+        if ('json' === $returnType) {
+            return json_decode($result);
         }
 
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getServerScript()
     {
-        $js = <<<'JS'
+        $errorPrefix = self::ERROR_PREFIX;
+
+        $js = <<<JS
 var net      = require('net')
   , zombie   = require('%modules_path%zombie')
   , Tough = require('%modules_path%zombie/node_modules/tough-cookie')
   , browser  = null
   , pointers = []
-  , buffer   = ""
+  , buffer   = ''
   , host     = '%host%'
   , port     = %port%;
 
@@ -147,8 +171,14 @@ net.createServer(function (stream) {
       pointers = [];
     }
 
-    eval(buffer);
-    buffer = "";
+    try {
+      eval(buffer);
+      buffer = '';
+    }
+    catch (e) {
+      buffer = '';
+      stream.end('{$errorPrefix}' + JSON.stringify(e.message));
+    }
   });
 }).listen(port, host, function() {
   console.log('server started on ' + host + ':' + port);

@@ -379,6 +379,7 @@ abstract class Server
      * @param   string                                $returnType  The return type
      *
      * @return  string  The eval'ed response
+     * @throws \InvalidArgumentException When unsupported $returnType given.
      */
     abstract protected function doEvalJS(Connection $conn, $str, $returnType = 'js');
 
@@ -394,6 +395,7 @@ abstract class Server
             if (null === $this->process) {
                 throw new \RuntimeException("No connection available. Did you start the server?");
             }
+
             if ($this->process->isRunning()) {
                 $this->stop();
                 throw new \RuntimeException(sprintf(
@@ -402,6 +404,7 @@ abstract class Server
                 ));
             }
         }
+
         if (!$this->process->isRunning()) {
             throw new \RuntimeException(sprintf(
                 "Server process has been terminated: (%s) [%s]",
@@ -422,7 +425,8 @@ abstract class Server
             '%host%'         => $this->host,
             '%port%'         => $this->port,
             '%modules_path%' => $this->nodeModulesPath,
-          ));
+        ));
+
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
         file_put_contents($serverPath, $serverScript);
 
