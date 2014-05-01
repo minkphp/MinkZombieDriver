@@ -22,24 +22,9 @@ class ZombieDriverTest extends JavascriptDriverTest
         $this->markTestSkipped('Zombie automatically waits for events to fire, so the wait test is irrelevant');
     }
 
-    public function testVisibility()
-    {
-        $this->markTestSkipped('Zombie.js doesn\'t support visibility checking');
-    }
-
-    public function testDragDrop()
-    {
-        $this->markTestSkipped('Zombie.js doesn\'t support drag-n-drop operations since v0.10.1');
-    }
-
     public function testIssue193()
     {
         $this->markTestSkipped('Zombie.js doesn\'t handle SELECT without values');
-    }
-
-    public function testIFrame()
-    {
-        $this->markTestSkipped('Zombie.js doesn\'t support iFrames switching');
     }
 
     public function testHtml5FormInputAttribute()
