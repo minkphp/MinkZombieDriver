@@ -229,7 +229,7 @@ JS;
      */
     public function getResponseHeaders()
     {
-        return (array)$this->server->evalJS('browser.lastResponse.headers', 'json');
+        return (array)$this->server->evalJS('browser.window._response.headers', 'json');
     }
 
     /**
