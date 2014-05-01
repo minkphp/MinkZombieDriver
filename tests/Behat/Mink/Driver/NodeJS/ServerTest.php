@@ -124,6 +124,10 @@ JS;
         $server->start();
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Server did not respond in time: (1) [Stopped]
+     */
     public function testStartServerThatDoesNotRespondInTime()
     {
         $process = $this->getNotRespondingServerProcessMock();
@@ -133,17 +137,13 @@ JS;
         $serverPath = __DIR__.'/server-fixtures/test_server.js';
         $server = new TestServer('127.0.0.1', 8124, null, $serverPath, 10000);
 
-        try {
-            $server->start($process);
-            $this->fail('No exception thrown');
-        } catch (\RuntimeException $ex) {
-            $this->assertEquals(
-                "Server did not respond in time: (1) [Stopped]",
-                $ex->getMessage()
-            );
-        }
+        $server->start($process);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Server process has been terminated: (1) [TROLOLOLO]
+     */
     public function testStartServerThatWasTerminated()
     {
         $process = $this->getTerminatedServerProcessMock();
@@ -153,15 +153,7 @@ JS;
         $serverPath = __DIR__.'/server-fixtures/test_server.js';
         $server = new TestServer('127.0.0.1', 8124, null, $serverPath, 10000);
 
-        try {
-            $server->start($process);
-            $this->fail('No exception thrown');
-        } catch (\RuntimeException $ex) {
-            $this->assertEquals(
-                "Server process has been terminated: (1) [TROLOLOLO]",
-                $ex->getMessage()
-            );
-        }
+        $server->start($process);
     }
 
     public function testStartServerSuccessfully()
@@ -218,6 +210,7 @@ JS;
         $this->assertTrue($server->isRunning());
 
         $process = $this->getTerminatedServerProcessMock();
+
         try {
             $server->start($process);
         } catch (\RuntimeException $ex) {
