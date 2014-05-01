@@ -4,7 +4,6 @@ php: [5.3, 5.4, 5.5, 5.6, hhvm]
 
 before_script:
   - export WEB_FIXTURES_HOST=http://localhost
-  - export WEB_FIXTURES_BROWSER=firefox
 
   # Install deps
   - composer install --dev --prefer-source
