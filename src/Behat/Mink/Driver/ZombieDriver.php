@@ -108,11 +108,13 @@ class ZombieDriver extends CoreDriver
     public function reset()
     {
         $js = <<<JS
-browser.deleteCookies();
+browser.destroy();
+browser = null;
 stream.end();
 JS;
 
         $this->server->evalJS($js);
+        $this->nativeRefs = array();
     }
 
     /**
