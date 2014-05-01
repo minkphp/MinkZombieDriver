@@ -509,19 +509,12 @@ JS;
         $value = json_encode($value);
         $js = <<<JS
 var node = {$ref},
-    tagName = node.tagName.toLowerCase(),
-    valid = false;
+    tagName = node.tagName.toLowerCase();
 if (tagName == "select") {
-  valid = true;
   browser.select(node, {$value});
-} else if (tagName == "input") {
-  var type = node.getAttribute('type');
-  if (type == "radio") {
-    valid = true;
-    browser.choose(node);
-  }
-}
-if (!valid) {
+} else if (tagName == "input" && node.getAttribute('type') == 'radio') {
+  browser.choose(node);
+} else {
   throw 'The element is not a select or radio input';
 }
 stream.end();
