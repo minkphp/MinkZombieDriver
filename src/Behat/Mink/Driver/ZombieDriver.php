@@ -641,12 +641,7 @@ JS;
      */
     public function executeScript($script)
     {
-        if (preg_match('/^function[\s\(]/', $script)) {
-            $script = preg_replace('/;$/', '', $script);
-            $script = '(' . $script . ')';
-        }
-
-        $script = json_encode($script);
+        $script = json_encode($this->fixSelfExecutingFunction($script));
         $this->server->evalJS("browser.evaluate({$script});stream.end();");
     }
 
@@ -657,12 +652,8 @@ JS;
     {
         $script = preg_replace('/^return\s+/', '', $script);
 
-        if (preg_match('/^function[\s\(]/', $script)) {
-            $script = preg_replace('/;$/', '', $script);
-            $script = '(' . $script . ')';
-        }
+        $script = json_encode($this->fixSelfExecutingFunction($script));
 
-        $script = json_encode($script);
         return $this->server->evalJS("browser.evaluate({$script})", 'json');
     }
 
@@ -797,5 +788,24 @@ JS;
         }
 
         return sprintf('pointers[%s]', $this->nativeRefs[$hash]);
+    }
+
+    /**
+     * Fixes self-executing functions to allow evaluating them.
+     *
+     * The self-executing function must be wrapped in braces to work.
+     *
+     * @param string $script
+     *
+     * @return string
+     */
+    private function fixSelfExecutingFunction($script)
+    {
+        if (preg_match('/^function[\s\(]/', $script)) {
+            $script = preg_replace('/;$/', '', $script);
+            $script = '(' . $script . ')';
+        }
+
+        return $script;
     }
 }
