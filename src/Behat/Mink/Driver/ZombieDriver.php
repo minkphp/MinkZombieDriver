@@ -388,6 +388,16 @@ JS;
     /**
      * {@inheritdoc}
      */
+    public function getOuterHtml($xpath)
+    {
+        $ref = $this->getNativeRefForXPath($xpath);
+
+        return $this->server->evalJS("{$ref}.outerHTML", 'json');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAttribute($xpath, $name)
     {
         $ref = $this->getNativeRefForXPath($xpath);
