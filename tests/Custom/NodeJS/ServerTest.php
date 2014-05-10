@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Behat\Mink\Driver\NodeJS;
+namespace Behat\Mink\Tests\Driver\Custom\NodeJS;
 
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server as BaseServer;
