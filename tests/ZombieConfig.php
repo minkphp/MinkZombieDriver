@@ -28,7 +28,7 @@ class ZombieConfig extends AbstractConfig
     public function skipMessage($testCase, $test)
     {
         if (
-            'Behat\Mink\Tests\Driver\Basic\Html5Test' === $testCase
+            'Behat\Mink\Tests\Driver\Form\Html5Test' === $testCase
             && in_array($test, array('testHtml5FormInputAttribute', 'testHtml5FormButtonAttribute', 'testHtml5FormOutside'))
         ) {
             return 'Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635';
