@@ -29,7 +29,12 @@ class ZombieConfig extends AbstractConfig
     {
         if (
             'Behat\Mink\Tests\Driver\Form\Html5Test' === $testCase
-            && in_array($test, array('testHtml5FormInputAttribute', 'testHtml5FormButtonAttribute', 'testHtml5FormOutside'))
+            && in_array($test, array(
+                'testHtml5FormInputAttribute',
+                'testHtml5FormButtonAttribute',
+                'testHtml5FormOutside',
+                'testHtml5FormRadioAttribute',
+            ))
         ) {
             return 'Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635';
         }
@@ -41,12 +46,6 @@ class ZombieConfig extends AbstractConfig
             return 'Zombie automatically waits for events to fire, so the wait test is irrelevant';
         }
 
-        if (
-            'Behat\Mink\Tests\Driver\Js\JavascriptTest' === $testCase
-            && 'testIssue193' === $test
-        ) {
-            return 'Zombie.js doesn\'t handle SELECT without values';
-        }
 
         return parent::skipMessage($testCase, $test);
     }
