@@ -29,7 +29,7 @@ Use [Composer](http://getcomposer.org/) to install all required PHP dependencies
 {
     "require": {
         "behat/mink":               "~1.5",
-        "behat/mink-zombie-driver": "~1.0"
+        "behat/mink-zombie-driver": "~1.1"
     }
 }
 ```
@@ -79,4 +79,4 @@ Copyright (c) 2011-2012 Pascal Cremer <b00gizm@gmail.com>
 Maintainers
 -----------
 
-* Pascal Cremer [b00gizm](http://github.com/b00gizm)
+* Alexander Obuhovich [aik099](http://github.com/aik099)
