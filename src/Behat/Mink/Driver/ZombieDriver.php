@@ -419,7 +419,7 @@ var node = {$ref},
 if (tagName == "input") {
   var type = node.getAttribute('type').toLowerCase();
   if (type == "checkbox") {
-    value = node.checked;
+    value = node.checked ? node.value : null;
   } else if (type == "radio") {
     var name = node.getAttribute('name');
     if (name) {
