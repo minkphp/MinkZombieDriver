@@ -1,11 +1,13 @@
 Mink Zombie.js Driver
 =====================
 
-[![Latest Stable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/stable.png)](https://packagist.org/packages/behat/mink-zombie-driver)
-[![Total Downloads](https://poser.pugx.org/behat/mink-zombie-driver/downloads.png)](https://packagist.org/packages/behat/mink-zombie-driver)
-[![Build Status](https://travis-ci.org/Behat/MinkZombieDriver.png?branch=master)](http://travis-ci.org/Behat/MinkZombieDriver)
+[![Latest Stable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/stable.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![Latest Unstable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/unstable.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![Total Downloads](https://poser.pugx.org/behat/mink-zombie-driver/downloads.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![Build Status](https://travis-ci.org/Behat/MinkZombieDriver.svg?branch=master)](https://travis-ci.org/Behat/MinkZombieDriver)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Behat/MinkZombieDriver/badges/quality-score.png?s=2e166ed0bc0d8bfde427fb9af2a93aaabbc09723)](https://scrutinizer-ci.com/g/Behat/MinkZombieDriver/)
 [![Code Coverage](https://scrutinizer-ci.com/g/Behat/MinkZombieDriver/badges/coverage.png?s=f271ed5a203ed036c6ce093e5269b60a76951f4f)](https://scrutinizer-ci.com/g/Behat/MinkZombieDriver/)
+[![License](https://poser.pugx.org/behat/mink-zombie-driver/license.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
 
 Installation & Compatibility
 ----------------------------
@@ -23,7 +25,7 @@ Some are more or less PHP specific and kinda hard to resolve. If you
 want to be 100% on the safe side, please use __version 2.0.0-alpha1 or
 higher__.
 
-Use [Composer](http://getcomposer.org/) to install all required PHP dependencies:
+Use [Composer](https://getcomposer.org/) to install all required PHP dependencies:
 
 ``` json
 {
@@ -35,7 +37,7 @@ Use [Composer](http://getcomposer.org/) to install all required PHP dependencies
 ```
 
 ``` bash
-$> curl http://getcomposer.org/installer | php
+$> curl -sS https://getcomposer.org/installer | php
 $> php composer.phar install
 ```
 
