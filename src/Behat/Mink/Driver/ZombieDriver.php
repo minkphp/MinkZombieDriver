@@ -561,11 +561,39 @@ JS;
     {
         $ref = $this->getNativeRefForXPath($xpath);
         $value = json_encode($value);
+        $multiple = json_encode($multiple);
         $js = <<<JS
 var node = {$ref},
+    value = {$value},
     tagName = node.tagName.toLowerCase();
 if (tagName == "select") {
-  browser.select(node, {$value});
+  if (node.getAttribute('multiple') && !{$multiple}) {
+    var toSelect,
+      option,
+      toUnselect = [];
+    for (var i = 0; i < node.options.length; i++) {
+      option = node.options[i];
+      if (option.selected && option.value !== value) {
+        toUnselect.push(option);
+      } else if (!option.selected && option.value === value) {
+        toSelect = option;
+      }
+    }
+
+    if (toSelect) {
+      for (i = 0; i < toUnselect.length; i++) {
+        toUnselect[i].removeAttribute('selected');
+      }
+      browser.selectOption(toSelect);
+    } else if (toUnselect.length) {
+      for (i = 1; i < toUnselect.length; i++) {
+        toUnselect[i].removeAttribute('selected');
+      }
+      browser.unselectOption(toUnselect[0]);
+    }
+  } else {
+    browser.select(node, value);
+  }
 } else if (tagName == "input" && node.getAttribute('type') == 'radio') {
   browser.choose(node);
 } else {
