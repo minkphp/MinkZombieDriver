@@ -478,19 +478,19 @@ JS;
 
         $js = <<<JS
 var node = {$ref},
+    value = {$value},
     tagName = node.tagName.toLowerCase(),
     type = node.getAttribute('type');
 if (tagName == 'select') {
   if (node.getAttribute('multiple')) {
-    var values = {$value};
     var toSelect = [];
     var toUnselect = [];
     var option;
     for (var i = 0; i < node.options.length; i++) {
       option = node.options[i];
-      if (option.selected && -1 === values.indexOf(option.value)) {
+      if (option.selected && -1 === value.indexOf(option.value)) {
         toUnselect.push(option);
-      } else if (!option.selected && -1 !== values.indexOf(option.value)) {
+      } else if (!option.selected && -1 !== value.indexOf(option.value)) {
         toSelect.push(option);
       }
     }
@@ -510,14 +510,40 @@ if (tagName == 'select') {
       browser.selectOption(toSelect[0]);
     }
   } else {
-    browser.select(node, {$value});
+    browser.select(node, value);
   }
 } else if (type == 'checkbox') {
-  {$value} ? browser.check(node) : browser.uncheck(node);
+  value ? browser.check(node) : browser.uncheck(node);
 } else if (type == 'radio') {
-  browser.choose(node);
+  if (node.value === value) {
+    browser.choose(node);
+  } else {
+    var formElements = node.form.elements,
+        name = node.getAttribute('name'),
+        found = false,
+        element;
+
+    if (!name) {
+      throw new Error('The radio button does not have the value "' + value + '"');
+    }
+
+    for (var i = 0; i < formElements.length; i++) {
+      element = formElements[i];
+      if (element.tagName.toLowerCase() == 'input' && element.type == 'radio' && element.name === name) {
+        if (value === element.value) {
+          found = true;
+          browser.choose(element);
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      throw new Error('The radio group "' + name + '" does not have an option "' + value + '"');
+    }
+  }
 } else {
-  browser.fill(node, {$value});
+  browser.fill(node, value);
 }
 stream.end();
 JS;
@@ -595,7 +621,33 @@ if (tagName == "select") {
     browser.select(node, value);
   }
 } else if (tagName == "input" && node.getAttribute('type') == 'radio') {
-  browser.choose(node);
+  if (node.value === value) {
+    browser.choose(node);
+  } else {
+    var formElements = node.form.elements,
+        name = node.getAttribute('name'),
+        found = false,
+        element;
+
+    if (!name) {
+      throw new Error('The radio button does not have the value "' + value + '"');
+    }
+
+    for (var i = 0; i < formElements.length; i++) {
+      element = formElements[i];
+      if (element.tagName.toLowerCase() == 'input' && element.type == 'radio' && element.name === name) {
+        if (value === element.value) {
+          found = true;
+          browser.choose(element);
+          break;
+        }
+      }
+    }
+
+    if (!found) {
+      throw new Error('The radio group "' + name + '" does not have an option "' + value + '"');
+    }
+  }
 } else {
   throw 'The element is not a select or radio input';
 }
