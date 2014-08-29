@@ -421,11 +421,20 @@ if (tagName == "input") {
   if (type == "checkbox") {
     value = node.checked ? node.value : null;
   } else if (type == "radio") {
-    var name = node.getAttribute('name');
-    if (name) {
-      var field = browser.field("input[type='radio'][name='" + name + "']:checked");
-      if (field) {
-        value = field.value;
+    if (node.checked) {
+      value = node.value;
+    } else {
+      var name = node.getAttribute('name');
+      if (name) {
+        var formElements = node.form.elements,
+            element;
+        for (var i = 0; i < formElements.length; i++) {
+          element = formElements[i];
+          if (element.type == 'radio' && element.getAttribute('name') === name && element.checked) {
+            value = element.value;
+            break;
+          }
+        }
       }
     }
   } else {
