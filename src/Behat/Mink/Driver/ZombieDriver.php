@@ -478,8 +478,41 @@ JS;
 
         $js = <<<JS
 var node = {$ref},
+    tagName = node.tagName.toLowerCase(),
     type = node.getAttribute('type');
-if (type == 'checkbox') {
+if (tagName == 'select') {
+  if (node.getAttribute('multiple')) {
+    var values = {$value};
+    var toSelect = [];
+    var toUnselect = [];
+    var option;
+    for (var i = 0; i < node.options.length; i++) {
+      option = node.options[i];
+      if (option.selected && -1 === values.indexOf(option.value)) {
+        toUnselect.push(option);
+      } else if (!option.selected && -1 !== values.indexOf(option.value)) {
+        toSelect.push(option);
+      }
+    }
+
+    if (0 === toSelect.length && toUnselect.length > 0) {
+      for (i = 1; i < toUnselect.length; i++) {
+        toUnselect[i].removeAttribute('selected');
+      }
+      browser.unselectOption(toUnselect[0]);
+    } else if (toSelect.length) {
+      for (i = 0; i < toUnselect.length; i++) {
+        toUnselect[i].removeAttribute('selected');
+      }
+      for (i = 1; i < toSelect.length; i++) {
+        toUnselect[i].setAttribute('selected', 'selected');
+      }
+      browser.selectOption(toSelect[0]);
+    }
+  } else {
+    browser.select(node, {$value});
+  }
+} else if (type == 'checkbox') {
   {$value} ? browser.check(node) : browser.uncheck(node);
 } else if (type == 'radio') {
   browser.choose(node);
