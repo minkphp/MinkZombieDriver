@@ -459,7 +459,7 @@ if (tagName == "input") {
     }
   }
 } else {
-  value = node.getAttribute('value');
+  value = node.value;
 }
 stream.end(JSON.stringify(value));
 JS;
