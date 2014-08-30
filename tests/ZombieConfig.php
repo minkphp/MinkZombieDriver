@@ -46,6 +46,10 @@ class ZombieConfig extends AbstractConfig
             return 'Zombie automatically waits for events to fire, so the wait test is irrelevant';
         }
 
+        if ('Behat\Mink\Tests\Driver\Js\ChangeEventTest' === $testCase && 'testIssue178' === $test) {
+            return 'Zombie does not trigger the keyup event when writing a value in a text input to simulate keyboard';
+        }
+
 
         return parent::skipMessage($testCase, $test);
     }
