@@ -159,8 +159,8 @@ var zombieVersionCompare = function (v2, op) {
   return version_compare(require('%modules_path%zombie/package').version, v2, op);
 };
 
-if (false == zombieVersionCompare('2.0.0alpha1', '>=')) {
-  throw new Error("Your zombie.js version is not compatible with this driver. Please use a version >= 2.0.0alpha1");
+if (false == zombieVersionCompare('2.0.0', '>=')) {
+  throw new Error("Your zombie.js version is not compatible with this driver. Please use a version >= 2.0.0");
 }
 
 net.createServer(function (stream) {

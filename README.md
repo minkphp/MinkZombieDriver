@@ -20,23 +20,20 @@ You need a working installation of [NodeJS](http://nodejs.org/) and
 npm install -g zombie
 ```
 
-There are some compatibility issues with older versions of zombie.js.
-Some are more or less PHP specific and kinda hard to resolve. If you
-want to be 100% on the safe side, please use __version 2.0.0-alpha1 or
-higher__.
+The driver requires zombie.js __version 2.0.0 or higher__.
 
 Use [Composer](https://getcomposer.org/) to install all required PHP dependencies:
 
-``` json
+```json
 {
     "require": {
-        "behat/mink":               "~1.5",
-        "behat/mink-zombie-driver": "~1.1"
+        "behat/mink":               "~1.6",
+        "behat/mink-zombie-driver": "~1.2"
     }
 }
 ```
 
-``` bash
+```bash
 $> curl -sS https://getcomposer.org/installer | php
 $> php composer.phar install
 ```
@@ -44,7 +41,7 @@ $> php composer.phar install
 Usage Example
 -------------
 
-``` php
+```php
 <?php
 
 use Behat\Mink\Mink,
