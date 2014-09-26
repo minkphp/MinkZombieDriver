@@ -417,7 +417,7 @@ var node = {$ref},
     tagName = node.tagName.toLowerCase(),
     value = null;
 if (tagName == "input") {
-  var type = node.getAttribute('type').toLowerCase();
+  var type = node.type.toLowerCase();
   if (type == "checkbox") {
     value = node.checked ? node.value : null;
   } else if (type == "radio") {
@@ -430,7 +430,7 @@ if (tagName == "input") {
             element;
         for (var i = 0; i < formElements.length; i++) {
           element = formElements[i];
-          if (element.type == 'radio' && element.getAttribute('name') === name && element.checked) {
+          if (element.type.toLowerCase() == 'radio' && element.getAttribute('name') === name && element.checked) {
             value = element.value;
             break;
           }
@@ -443,10 +443,10 @@ if (tagName == "input") {
 } else if (tagName == "textarea") {
   value = node.value;
 } else if (tagName == "select") {
-  if (node.getAttribute('multiple')) {
+  if (node.multiple) {
     value = [];
     for (var i = 0; i < node.options.length; i++) {
-      if (node.options[ i ].selected) {
+      if (node.options[i].selected) {
         value.push(node.options[ i ].value);
       }
     }
@@ -480,9 +480,9 @@ JS;
 var node = {$ref},
     value = {$value},
     tagName = node.tagName.toLowerCase(),
-    type = node.getAttribute('type');
+    type = node.type.toLowerCase();
 if (tagName == 'select') {
-  if (node.getAttribute('multiple')) {
+  if (node.multiple) {
     var toSelect = [];
     var toUnselect = [];
     var option;
@@ -497,15 +497,15 @@ if (tagName == 'select') {
 
     if (0 === toSelect.length && toUnselect.length > 0) {
       for (i = 1; i < toUnselect.length; i++) {
-        toUnselect[i].removeAttribute('selected');
+        toUnselect[i].selected = false;
       }
       browser.unselectOption(toUnselect[0]);
     } else if (toSelect.length) {
       for (i = 0; i < toUnselect.length; i++) {
-        toUnselect[i].removeAttribute('selected');
+        toUnselect[i].selected = false;
       }
       for (i = 1; i < toSelect.length; i++) {
-        toUnselect[i].setAttribute('selected', 'selected');
+        toUnselect[i].selected = true;
       }
       browser.selectOption(toSelect[0]);
     }
@@ -529,7 +529,7 @@ if (tagName == 'select') {
 
     for (var i = 0; i < formElements.length; i++) {
       element = formElements[i];
-      if (element.tagName.toLowerCase() == 'input' && element.type == 'radio' && element.name === name) {
+      if (element.tagName.toLowerCase() == 'input' && element.type.toLowerCase() == 'radio' && element.name === name) {
         if (value === element.value) {
           found = true;
           browser.choose(element);
@@ -593,7 +593,7 @@ var node = {$ref},
     value = {$value},
     tagName = node.tagName.toLowerCase();
 if (tagName == "select") {
-  if (node.getAttribute('multiple') && !{$multiple}) {
+  if (node.multiple && !{$multiple}) {
     var toSelect,
       option,
       toUnselect = [];
@@ -608,19 +608,19 @@ if (tagName == "select") {
 
     if (toSelect) {
       for (i = 0; i < toUnselect.length; i++) {
-        toUnselect[i].removeAttribute('selected');
+        toUnselect[i].selected = false;
       }
       browser.selectOption(toSelect);
     } else if (toUnselect.length) {
       for (i = 1; i < toUnselect.length; i++) {
-        toUnselect[i].removeAttribute('selected');
+        toUnselect[i].selected = false;
       }
       browser.unselectOption(toUnselect[0]);
     }
   } else {
     browser.select(node, value);
   }
-} else if (tagName == "input" && node.getAttribute('type') == 'radio') {
+} else if (tagName == "input" && node.type.toLowerCase() == 'radio') {
   if (node.value === value) {
     browser.choose(node);
   } else {
@@ -635,7 +635,7 @@ if (tagName == "select") {
 
     for (var i = 0; i < formElements.length; i++) {
       element = formElements[i];
-      if (element.tagName.toLowerCase() == 'input' && element.type == 'radio' && element.name === name) {
+      if (element.tagName.toLowerCase() == 'input' && element.type.toLowerCase() == 'radio' && element.name === name) {
         if (value === element.value) {
           found = true;
           browser.choose(element);
@@ -676,10 +676,10 @@ JS;
         $js = <<<JS
 var node    = {$ref},
     tagName = node.tagName.toLowerCase(),
-    type    = (node.getAttribute('type') || '').toLowerCase();
+    type    = (node.type || '').toLowerCase();
 
 if (tagName == "button" || (tagName == "input" && (type == "button" || type == "submit"))) {
-  if (node.getAttribute('disabled')) {
+  if (node.disabled) {
     stream.end('This button is disabled');
   }
 }
