@@ -19,6 +19,10 @@ class ZombieConfig extends AbstractConfig
     {
         $server = new ZombieServer('127.0.0.1', 8124, 'node');
 
+        if (isset($_SERVER['NODE_MODULES_PATH'])) {
+            $server->setNodeModulesPath($_SERVER['NODE_MODULES_PATH']);
+        }
+
         return new ZombieDriver($server);
     }
 
