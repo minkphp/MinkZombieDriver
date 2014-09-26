@@ -1,5 +1,5 @@
-.DS_Store
 vendor
 composer.phar
 composer.lock
 phpunit.xml
+node_modules
