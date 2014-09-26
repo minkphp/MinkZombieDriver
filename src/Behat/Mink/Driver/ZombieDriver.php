@@ -805,8 +805,7 @@ JS;
     return browser.evaluate($conditionEscaped);
   };
 
-  browser.waitDuration = {$timeout};
-  browser.wait(checkCondition).then(function () {
+  browser.wait({function: checkCondition, duration: $timeout}, function () {
     stream.end(JSON.stringify(checkCondition()));
   });
 }());
