@@ -34,9 +34,7 @@ class ZombieDriver extends CoreDriver
     {
         // Ensure that the "stop" method gets called no matter
         // how the PHP execution finishes.
-        if (function_exists("register_shutdown_function")) {
-          register_shutdown_function(array($this, 'stop'));
-        }
+        register_shutdown_function(array($this, 'stop'));
 
         if ($serverOrHost instanceof ZombieServer) {
             $this->server = $serverOrHost;
