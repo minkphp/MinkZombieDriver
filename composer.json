@@ -20,6 +20,7 @@
     ],
 
     "require": {
+        "ext-sockets":      "*",
         "php":              ">=5.3.1",
         "behat/mink":       "~1.7@dev",
         "symfony/process":  "~2.1"
