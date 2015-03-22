@@ -25,11 +25,6 @@ The driver requires zombie.js __version 2.0.0 or higher__.
 Use [Composer](https://getcomposer.org/) to install all required PHP dependencies:
 
 ```bash
-$ curl -sS https://getcomposer.org/installer | php
-$ php composer.phar install
-```
-
-```bash
 $ composer require --dev behat/mink behat/mink-zombie-driver
 ```
 
