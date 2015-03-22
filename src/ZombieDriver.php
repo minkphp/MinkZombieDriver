@@ -164,15 +164,33 @@ JS;
     public function setBasicAuth($user, $password)
     {
         if (false === $user) {
-            $this->server->evalJS("browser.authenticate().reset();stream.end();");
-
-            return;
+            $user = null;
+            $password = null;
         }
 
         $userEscaped = json_encode($user);
         $passwordEscaped = json_encode($password);
 
-        $this->server->evalJS("browser.authenticate().basic({$userEscaped}, {$passwordEscaped});stream.end();");
+        $js = <<<JS
+var username = $userEscaped;
+var password = $passwordEscaped;
+
+if (browser.authenticate) {
+    if (null === username) {
+        browser.authenticate().reset();
+    } else {
+        browser.authenticate().basic(username, password);
+    }
+} else {
+    browser.on('authenticate', function (authentication) {
+        authentication.username = username;
+        authentication.password = password;
+    });
+}
+stream.end();
+JS;
+
+        $this->server->evalJS($js);
     }
 
     /**
