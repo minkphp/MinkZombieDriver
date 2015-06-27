@@ -236,7 +236,14 @@ JS;
      */
     public function getResponseHeaders()
     {
-        return (array) $this->server->evalJS('browser.window._response.headers', 'json');
+        $js = <<<JS
+var response = browser.response || browser.window._response,
+    headers = response.headers.toObject ? response.headers.toObject() : response.headers;
+
+stream.end(JSON.stringify(headers));
+JS;
+
+        return json_decode($this->server->evalJS($js), true);
     }
 
     /**
