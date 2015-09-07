@@ -869,7 +869,7 @@ browser.fire({$ref}, "{$event}", function (err) {
 JS;
         $out = $this->server->evalJS($js);
         if (!empty($out)) {
-            throw new DriverException(sprintf("Error while processing event '%s'", $event));
+            throw new DriverException(sprintf("Error while processing event '%s': %s", $event, $out));
         }
     }
 
