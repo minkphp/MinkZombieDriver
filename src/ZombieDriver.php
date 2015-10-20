@@ -101,6 +101,7 @@ JS;
 
         $this->server->evalJS($js);
         $this->setBasicAuth(false, '');
+        $this->switchToWindow(null);
     }
 
     /**
