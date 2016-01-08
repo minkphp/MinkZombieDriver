@@ -822,7 +822,7 @@ JS;
 }());
 JS;
 
-        return json_decode($this->server->evalJS($js));
+        return (bool)json_decode($this->server->evalJS($js));
     }
 
     /**
