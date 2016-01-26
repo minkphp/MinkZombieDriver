@@ -174,6 +174,7 @@ net.createServer(function (stream) {
   stream.on('end', function () {
     if (browser == null) {
       browser = new zombie();
+      browser.strictSSL = %strict_ssl%;
 
       // Clean up old pointers
       pointers = [];

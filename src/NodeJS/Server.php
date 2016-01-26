@@ -61,6 +61,11 @@ abstract class Server
     protected $connection;
 
     /**
+     * @var boolean
+     */
+    protected $strictSSL;
+
+    /**
      * Constructor
      *
      * @param string $host            The server host
@@ -231,6 +236,28 @@ abstract class Server
     public function getThreshold()
     {
         return $this->threshold;
+    }
+
+    /**
+     * Setter strict SSL
+     *
+     * @param boolean Whether to use strictSSL or not.
+     *
+     */
+    public function setStrictSSL($strict = TRUE)
+    {
+        return $this->strictSSL = $strict;
+    }
+
+    /**
+     * Getter strict SSL
+     *
+     * @return boolean Whether to use strictSSL or not.
+     *
+     */
+    public function getStrictSSL()
+    {
+        return $this->strictSSL;
     }
 
     /**
@@ -423,6 +450,7 @@ abstract class Server
             '%host%'         => $this->host,
             '%port%'         => $this->port,
             '%modules_path%' => $this->nodeModulesPath,
+            '%strict_ssl%'   => $this->strictSSL,
         ));
 
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
