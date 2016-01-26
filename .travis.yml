@@ -10,7 +10,7 @@ php: [5.3, 5.4, 5.5, 5.6, 7, hhvm]
 
 env:
   global:
-    - IOJS_VERSION=''
+    - NODE_VERSION=''
     - ZOMBIE_VERSION='@^3.0' # npm will install Zombie 4.x by default, even though it is not compatible with node...
     - WEB_FIXTURES_HOST=http://localhost:8000
 
@@ -20,7 +20,7 @@ matrix:
       env: ZOMBIE_VERSION='@^2.0'
     - php: 5.6
       env:
-        - IOJS_VERSION='2.3.1'
+        - NODE_VERSION='5.4.1'
         - ZOMBIE_VERSION='@^4.0'
   allow_failures:
     - php: 7
@@ -36,7 +36,7 @@ before_script:
 
   - export NODE_MODULES_PATH="$(pwd)/node_modules/"
 
-  - if [[ "$IOJS_VERSION" != "" ]]; then wget https://iojs.org/dist/v${IOJS_VERSION}/iojs-v${IOJS_VERSION}-linux-x64.tar.xz && tar xf iojs-v${IOJS_VERSION}-linux-x64.tar.xz && export NODE_BIN="`pwd`/iojs-v${IOJS_VERSION}-linux-x64/bin/node"; fi
+  - if [[ "$NODE_VERSION" != "" ]]; then wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && tar xf node-v${NODE_VERSION}-linux-x64.tar.xz && export NODE_BIN="`pwd`/node-v${NODE_VERSION}-linux-x64/bin/node"; fi
 
 script: phpunit -v --coverage-clover=coverage.clover
 
