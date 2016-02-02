@@ -61,6 +61,11 @@ abstract class Server
     protected $connection;
 
     /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * Constructor
      *
      * @param string $host            The server host
@@ -76,7 +81,8 @@ abstract class Server
         $nodeBin = null,
         $serverPath = null,
         $threshold = 2000000,
-        $nodeModulesPath = ''
+        $nodeModulesPath = '',
+        $options = array()
     ) {
         if (null === $nodeBin) {
             $nodeBin = 'node';
@@ -93,6 +99,8 @@ abstract class Server
 
         $this->serverPath      = $serverPath;
         $this->threshold       = intval($threshold);
+
+        $this->setOptions($options);
     }
 
     /**
@@ -251,6 +259,52 @@ abstract class Server
     public function getConnection()
     {
         return $this->connection;
+    }
+
+    /**
+     * Return the options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set options array.
+     */
+    public function setOptions($options)
+    {
+        // pass these to the setOption() method which will validate.
+        foreach ($options as $key => $value) {
+            $this->setOption($key, $value);
+        }
+    }
+
+    /**
+     * Set a single option.
+     */
+    public function setOption($option, $value)
+    {
+        $valid_options = array(
+            'features',
+            'headers',
+            'waitDuration',
+            'proxy',
+            'referrer',
+            'silent',
+            'site',
+            'strictSSL',
+            'userAgent',
+            'language',
+            'runScripts',
+            'localAddress',
+        );
+
+        if (in_array($option, $valid_options)) {
+            $this->options[$option] = $value;
+        }
     }
 
     /**
@@ -423,6 +477,7 @@ abstract class Server
             '%host%'         => $this->host,
             '%port%'         => $this->port,
             '%modules_path%' => $this->nodeModulesPath,
+            '%options%'      => json_encode($this->options),
         ));
 
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
