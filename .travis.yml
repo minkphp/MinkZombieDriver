@@ -22,8 +22,6 @@ matrix:
       env:
         - NODE_VERSION='5.4.1'
         - ZOMBIE_VERSION='@^4.0'
-  allow_failures:
-    - php: 7
 
 before_script:
   # Install deps
