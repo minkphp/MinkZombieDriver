@@ -258,7 +258,8 @@ JS;
         }
 
         $nameEscaped = json_encode($name);
-        $valueEscaped = json_encode($value);
+        // PHP performs URL encoding and decoding automatically on cookies, but Zombie does not.
+        $valueEscaped = json_encode(urlencode($value));
 
         $js = <<<JS
 var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname, path: '/'};
@@ -300,13 +301,20 @@ var cookieId = {name: {$nameEscaped}, domain: browser.window.location.hostname},
     cookieVal = browser.getCookie(cookieId, false);
 
 if (cookieVal) {
-    stream.end(JSON.stringify(decodeURIComponent(cookieVal)));
+    stream.end(JSON.stringify(cookieVal));
 } else {
     stream.end(JSON.stringify(null));
 }
 JS;
 
-        return json_decode($this->server->evalJS($js));
+        $cookie = json_decode($this->server->evalJS($js));
+
+        if (null === $cookie) {
+            return null;
+        }
+
+        // PHP performs URL encoding and decoding automatically on cookies, but Zombie does not.
+        return urldecode($cookie);
     }
 
     /**
