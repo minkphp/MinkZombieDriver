@@ -202,23 +202,6 @@ abstract class Server
     }
 
     /**
-     * Get a single option.
-     *
-     * @param string $option The option name to retrieve.
-     * @param mixed $default_value The value to return if the option is not set.
-     *
-     * @return mixed The option value or default value if it is not set.
-     */
-    public function getOption($option, $default_value = NULL)
-    {
-        if (!isset($this->options[$option])) {
-          return $default_value;
-        }
-
-        return $this->options[$option];
-    }
-
-    /**
      * Return the all options.
      *
      * @return array
