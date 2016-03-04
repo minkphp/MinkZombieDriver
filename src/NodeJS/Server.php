@@ -61,6 +61,11 @@ abstract class Server
     protected $connection;
 
     /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * Constructor
      *
      * @param string $host            The server host
@@ -76,7 +81,8 @@ abstract class Server
         $nodeBin = null,
         $serverPath = null,
         $threshold = 2000000,
-        $nodeModulesPath = ''
+        $nodeModulesPath = '',
+        $options = array()
     ) {
         if (null === $nodeBin) {
             $nodeBin = 'node';
@@ -93,6 +99,8 @@ abstract class Server
 
         $this->serverPath      = $serverPath;
         $this->threshold       = intval($threshold);
+
+        $this->setOptions($options);
     }
 
     /**
@@ -191,6 +199,30 @@ abstract class Server
     public function getNodeModulesPath()
     {
         return $this->nodeModulesPath;
+    }
+
+    /**
+     * Return the all options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set options array.
+     *
+     * @param array $options Array of options to set.
+     */
+    public function setOptions($options)
+    {
+        foreach ($options as $key => $value) {
+            $this->options[$key] = $value;
+        }
+
+        $this->serverPath = $this->createTemporaryServer();
     }
 
     /**
@@ -423,6 +455,7 @@ abstract class Server
             '%host%'         => $this->host,
             '%port%'         => $this->port,
             '%modules_path%' => $this->nodeModulesPath,
+            '%options%'      => json_encode($this->options),
         ));
 
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');

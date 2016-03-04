@@ -173,7 +173,7 @@ net.createServer(function (stream) {
 
   stream.on('end', function () {
     if (browser == null) {
-      browser = new zombie();
+      browser = new zombie(%options%);
 
       // Clean up old pointers
       pointers = [];
