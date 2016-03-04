@@ -219,17 +219,6 @@ abstract class Server
     }
 
     /**
-     * Set a single option.
-     *
-     * @param string $option The option name
-     * @param mixed $value The option value
-     */
-    public function setOption($option, $value)
-    {
-        $this->options[$option] = $value;
-    }
-
-    /**
      * Return the all options.
      *
      * @return array
@@ -247,7 +236,7 @@ abstract class Server
     public function setOptions($options)
     {
         foreach ($options as $key => $value) {
-            $this->setOption($key, $value);
+            $this->options[$key] = $value;
         }
         $this->serverPath = $this->createTemporaryServer();
     }
