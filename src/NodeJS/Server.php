@@ -221,6 +221,7 @@ abstract class Server
         foreach ($options as $key => $value) {
             $this->options[$key] = $value;
         }
+
         $this->serverPath = $this->createTemporaryServer();
     }
 
