@@ -202,6 +202,56 @@ abstract class Server
     }
 
     /**
+     * Get a single option.
+     *
+     * @param string $option The option name to retrieve.
+     * @param mixed $default_value The value to return if the option is not set.
+     *
+     * @return mixed The option value or default value if it is not set.
+     */
+    public function getOption($option, $default_value = NULL)
+    {
+        if (!isset($this->options[$option])) {
+          return $default_value;
+        }
+
+        return $this->options[$option];
+    }
+
+    /**
+     * Set a single option.
+     *
+     * @param string $option The option name
+     * @param mixed $value The option value
+     */
+    public function setOption($option, $value)
+    {
+        $this->options[$option] = $value;
+    }
+
+    /**
+     * Return the all options.
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * Set options array.
+     *
+     * @param array $options Array of options to set.
+     */
+    public function setOptions($options)
+    {
+        foreach ($options as $key => $value) {
+            $this->setOption($key, $value);
+        }
+    }
+
+    /**
      * Setter server script path
      *
      * @param string $serverPath Path to server script
@@ -259,52 +309,6 @@ abstract class Server
     public function getConnection()
     {
         return $this->connection;
-    }
-
-    /**
-     * Return the options.
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * Set options array.
-     */
-    public function setOptions($options)
-    {
-        // pass these to the setOption() method which will validate.
-        foreach ($options as $key => $value) {
-            $this->setOption($key, $value);
-        }
-    }
-
-    /**
-     * Set a single option.
-     */
-    public function setOption($option, $value)
-    {
-        $valid_options = array(
-            'features',
-            'headers',
-            'waitDuration',
-            'proxy',
-            'referrer',
-            'silent',
-            'site',
-            'strictSSL',
-            'userAgent',
-            'language',
-            'runScripts',
-            'localAddress',
-        );
-
-        if (in_array($option, $valid_options)) {
-            $this->options[$option] = $value;
-        }
     }
 
     /**
