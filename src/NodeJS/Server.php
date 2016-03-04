@@ -276,6 +276,13 @@ abstract class Server
                 $this->nodeBin,
                 $this->serverPath,
             ));
+            $processBuilder->setEnv('HOST', $this->host)
+                ->setEnv('PORT', $this->port);
+
+            if (!empty($this->nodeModulesPath)) {
+                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+            }
+
             $process = $processBuilder->getProcess();
         }
         $this->process = $process;
@@ -419,11 +426,16 @@ abstract class Server
      */
     protected function createTemporaryServer()
     {
-        $serverScript = strtr($this->getServerScript(), array(
+        $rawServerScript = $this->getServerScript();
+        $serverScript = strtr($rawServerScript, array(
             '%host%'         => $this->host,
             '%port%'         => $this->port,
             '%modules_path%' => $this->nodeModulesPath,
         ));
+
+        if ($serverScript !== $rawServerScript) {
+            @trigger_error('Using the `%host%`, `%port%` and `%modules_path%` placeholders in the server script is deprecated since ZombieDriver 1.4 and will be removed in 2.0. Rely on the HOST, PORT and NODE_PATH environment variables instead.', E_USER_DEPRECATED);
+        }
 
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
         file_put_contents($serverPath, $serverScript);
