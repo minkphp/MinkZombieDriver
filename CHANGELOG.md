@@ -1,3 +1,28 @@
+1.4.0 / 2016-03-05
+==================
+
+New features:
+
+* Refactored the node.js script running zombie to be a dedicated script configured
+  through environment variables. Zombie can now be installed with npm in any parent
+  of the ZombieDriver installation path without having to configure the node modules
+  path in the driver (so for instance using `npm install zombie` in the root of the
+  project)
+* Added the `HOST` and `PORT` environment variables in the process running the server
+  to expose the configuration
+
+Bug fixes:
+
+* Fixed the return value of `wait` to ensure it is always a boolean
+* Fixed the handling of cookie values containing a semicolon
+* Fixed `setNodeModulesPath` to be compatible with the usage of custom server scripts
+* Added support for the Symfony 3 Process component (no change actually needed)
+* Fixed the host and port setters which were not taken into account by the node.js code
+
+Testsuite:
+
+*  Disallowed failures on PHP 7 on Travis (tests were passing since a long time)
+
 1.3.0 / 2015-09-21
 ==================
 
