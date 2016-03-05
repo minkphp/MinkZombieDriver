@@ -180,7 +180,6 @@ abstract class Server
             ));
         }
         $this->nodeModulesPath = $nodeModulesPath;
-        $this->serverPath = $this->createTemporaryServer();
     }
 
     /**

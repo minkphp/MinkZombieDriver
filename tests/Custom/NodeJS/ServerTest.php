@@ -17,21 +17,32 @@ class TestServer extends BaseServer
     protected function getServerScript()
     {
         return <<<JS
-var zombie = require('%modules_path%zombie')
-  , host   = '%host%'
-  , port   = %port%;
+var zombie = require('zombie')
+  , host   = process.env.HOST
+  , port   = process.env.PORT;
 JS;
     }
 
     protected function createTemporaryServer()
     {
-        $this->serverScript = strtr($this->getServerScript(), array(
-            '%host%'         => $this->host,
-            '%port%'         => $this->port,
-            '%modules_path%' => $this->nodeModulesPath,
-          ));
+        $path = parent::createTemporaryServer();
+
+        $this->serverScript = file_get_contents($path);
+        unlink($path);
 
         return '/path/to/server';
+    }
+}
+
+class LegacyTestServer extends TestServer
+{
+    protected function getServerScript()
+    {
+        return <<<JS
+var zombie = require('%modules_path%zombie')
+  , host   = '%host%'
+  , port   = %port%;
+JS;
     }
 }
 
@@ -47,6 +58,21 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path/to/server', $server->getServerPath());
         $this->assertEquals(2000000, $server->getThreshold());
         $this->assertEquals('', $server->getNodeModulesPath());
+
+        $expected = <<<JS
+var zombie = require('zombie')
+  , host   = process.env.HOST
+  , port   = process.env.PORT;
+JS;
+        $this->assertEquals($expected, $server->serverScript);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testCreateServerWithPlaceholders()
+    {
+        $server = new LegacyTestServer();
 
         $expected = <<<JS
 var zombie = require('zombie')
@@ -75,11 +101,34 @@ JS;
         $this->assertEquals('../../', $server->getNodeModulesPath());
 
         $expected = <<<JS
+var zombie = require('zombie')
+  , host   = process.env.HOST
+  , port   = process.env.PORT;
+JS;
+        $this->assertEquals($expected, $server->serverScript);
+    }
+
+    /**
+     * @group legacy
+     */
+    public function testCreateCustomServerWithPlaceholders()
+    {
+        $server = new LegacyTestServer(
+            '123.123.123.123',
+            1234,
+            null,
+            null,
+            5000000,
+            '../../'
+        );
+
+        $expected = <<<JS
 var zombie = require('../../zombie')
   , host   = '123.123.123.123'
   , port   = 1234;
 JS;
         $this->assertEquals($expected, $server->serverScript);
+
     }
 
     public function testSetNodeModulesPath()
@@ -88,13 +137,6 @@ JS;
         $server->setNodeModulesPath('../../');
 
         $this->assertEquals('../../', $server->getNodeModulesPath());
-
-        $expected = <<<JS
-var zombie = require('../../zombie')
-  , host   = '127.0.0.1'
-  , port   = 8124;
-JS;
-        $this->assertEquals($expected, $server->serverScript);
     }
 
     /**
