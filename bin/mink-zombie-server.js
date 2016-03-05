@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/bin/env node
 var net = require('net');
 var zombie = require('zombie');
 var Tough = require('zombie/node_modules/tough-cookie');
