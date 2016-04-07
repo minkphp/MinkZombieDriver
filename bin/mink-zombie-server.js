@@ -1,7 +1,20 @@
 #!/usr/bin/env node
 var net = require('net');
 var zombie = require('zombie');
-var Tough = require('zombie/node_modules/tough-cookie');
+var Tough;
+try {
+  // Try require for the npm v3+ location.
+  Tough = require('tough-cookie');
+}
+catch (err) {
+  try {
+    // Try require for the npm v1 and v2 location.
+    Tough = require('zombie/node_modules/tough-cookie');
+  }
+  catch (err) {
+    throw new Error('Cannot find the tough-cookie module');
+  }
+}
 var browser = null;
 var pointers = [];
 var buffer = '';
