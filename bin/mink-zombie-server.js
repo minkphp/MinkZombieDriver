@@ -1,12 +1,29 @@
 #!/usr/bin/env node
 var net = require('net');
 var zombie = require('zombie');
-var Tough = require('zombie/node_modules/tough-cookie');
 var browser = null;
 var pointers = [];
 var buffer = '';
 var host = process.env.HOST || '127.0.0.1';
 var port = process.env.PORT || 8124;
+
+var safe_npm_require = function (module_name, parent) {
+  try {
+    // Try require for the npm v3+ location.
+    return require(module_name);
+  }
+  catch (err) {
+    try {
+      // Try require for the npm v1 and v2 location.
+      return require(parent + '/node_modules/' + module_name);
+    }
+    catch (err) {
+      throw new Error('Cannot find the ' + module_name + ' module');
+    }
+  }
+};
+
+var Tough = safe_npm_require('tough-cookie', 'zombie');
 
 Tough.Cookie.prototype.cookieString = function cookieString() {
     return this.key + '=' + (this.value == null ? '' : this.value);
