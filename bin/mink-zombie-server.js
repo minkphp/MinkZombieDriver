@@ -1,16 +1,11 @@
 #!/usr/bin/env node
 var net = require('net');
 var zombie = require('zombie');
-var Tough = require('zombie/node_modules/tough-cookie');
 var browser = null;
 var pointers = [];
 var buffer = '';
 var host = process.env.HOST || '127.0.0.1';
 var port = process.env.PORT || 8124;
-
-Tough.Cookie.prototype.cookieString = function cookieString() {
-    return this.key + '=' + (this.value == null ? '' : this.value);
-};
 
 var zombieVersionCompare = function (v2, op) {
     var version_compare = function (v1, v2, operator) {
