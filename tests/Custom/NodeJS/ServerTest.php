@@ -218,6 +218,14 @@ JS;
     }
 
     /**
+     * @expectedException  \InvalidArgumentException
+     */
+    public function testCreateServerWithInvalidNodeModulesPath()
+    {
+        new TestServer('127.0.0.1', 8124, null, null, 2000000, '../..');
+    }
+
+    /**
      * @expectedException  \RuntimeException
      */
     public function testStartServerWithNonExistingServerScript()
