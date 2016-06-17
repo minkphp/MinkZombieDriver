@@ -109,6 +109,56 @@ JS;
     }
 
     /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change host of a running server.
+     */
+    public function testSetHostOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setHost('123.123.123.123');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change port of a running server.
+     */
+    public function testSetPortOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setPort(1234);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change node bin of a running server.
+     */
+    public function testSetNodeBinOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setNodeBin('test');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change server path of a running server.
+     */
+    public function testSetServerPathOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setServerPath('test');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change threshold of a running server.
+     */
+    public function testSetThresholdOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setThreshold('test');
+    }
+
+    /**
      * @group legacy
      */
     public function testCreateCustomServerWithPlaceholders()
@@ -158,6 +208,16 @@ JS;
     }
 
     /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change node modules path of a running server.
+     */
+    public function testSetNodeModulesPathOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setNodeModulesPath('../../');
+    }
+
+    /**
      * @expectedException  \RuntimeException
      */
     public function testStartServerWithNonExistingServerScript()
@@ -200,18 +260,9 @@ JS;
 
     public function testStartServerSuccessfully()
     {
-        $host = '127.0.0.1';
-        $port = 8124;
-
-        $process = $this->getWorkingServerProcessMock($host, $port);
-        $process->expects($this->once())
-                ->method('start');
-
-        $serverPath = __DIR__.'/server-fixtures/test_server.js';
-        $server = new TestServer($host, $port, null, $serverPath, 10000);
-
         try {
-            $server->start($process);
+            $server = $this->getRunningServer();
+
             $this->assertInstanceOf(
                 'Behat\Mink\Driver\NodeJS\Connection',
                 $server->getConnection()
@@ -302,6 +353,22 @@ JS;
                 ->will($this->returnValue(1));
 
         return $process;
+    }
+
+    protected function getRunningServer()
+    {
+        $host = '127.0.0.1';
+        $port = 8124;
+
+        $process = $this->getWorkingServerProcessMock($host, $port);
+        $process->expects($this->once())
+            ->method('start');
+
+        $serverPath = __DIR__.'/server-fixtures/test_server.js';
+        $server = new TestServer($host, $port, null, $serverPath, 10000);
+        $server->start($process);
+
+        return $server;
     }
 
     protected function getWorkingServerProcessMock($host, $port)

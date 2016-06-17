@@ -109,9 +109,15 @@ abstract class Server
      * Setter host
      *
      * @param string $host The server host
+     *
+     * @throws \LogicException When server is already running.
      */
     public function setHost($host)
     {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change host of a running server.');
+        }
+
         $this->host = $host;
     }
 
@@ -129,9 +135,15 @@ abstract class Server
      * Setter port
      *
      * @param int $port The server port
+     *
+     * @throws \LogicException When server is already running.
      */
     public function setPort($port)
     {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change port of a running server.');
+        }
+
         $this->port = intval($port);
     }
 
@@ -149,9 +161,15 @@ abstract class Server
      * Setter NodeJS binary path
      *
      * @param string $nodeBin Path to NodeJS binary
+     *
+     * @throws \LogicException When server is already running.
      */
     public function setNodeBin($nodeBin)
     {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change node bin of a running server.');
+        }
+
         $this->nodeBin = $nodeBin;
     }
 
@@ -168,8 +186,10 @@ abstract class Server
     /**
      * Setter NodeJS modules path
      *
-     * @param  string                    $nodeModulesPath Path to NodeJS modules.
-     * @throws \InvalidArgumentException Invalid path
+     * @param  string $nodeModulesPath Path to NodeJS modules.
+     *
+     * @throws \InvalidArgumentException Invalid path is invalid.
+     * @throws \LogicException When server is already running.
      */
     public function setNodeModulesPath($nodeModulesPath)
     {
@@ -179,6 +199,11 @@ abstract class Server
                 $nodeModulesPath
             ));
         }
+
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change node modules path of a running server.');
+        }
+
         $this->nodeModulesPath = $nodeModulesPath;
     }
 
@@ -196,9 +221,15 @@ abstract class Server
      * Setter server script path
      *
      * @param string $serverPath Path to server script
+     *
+     * @throws \LogicException When server is already running.
      */
     public function setServerPath($serverPath)
     {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change server path of a running server.');
+        }
+
         $this->serverPath = $serverPath;
     }
 
@@ -216,9 +247,15 @@ abstract class Server
      * Setter threshold value
      *
      * @param int $threshold Threshold value in micro seconds
+     *
+     * @throws \LogicException When server is already running.
      */
     public function setThreshold($threshold)
     {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change threshold of a running server.');
+        }
+
         $this->threshold = intval($threshold);
     }
 
