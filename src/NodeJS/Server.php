@@ -82,17 +82,21 @@ abstract class Server
             $nodeBin = 'node';
         }
 
-        $this->host            = $host;
-        $this->port            = intval($port);
-        $this->nodeBin         = $nodeBin;
-        $this->nodeModulesPath = $nodeModulesPath;
+        $this->setHost($host);
+        $this->setPort($port);
+
+        if (!empty($nodeModulesPath)) {
+            $this->setNodeModulesPath($nodeModulesPath);
+        }
+
+        $this->setNodeBin($nodeBin);
 
         if (null === $serverPath) {
             $serverPath = $this->createTemporaryServer();
         }
 
-        $this->serverPath      = $serverPath;
-        $this->threshold       = intval($threshold);
+        $this->setServerPath($serverPath);
+        $this->setThreshold($threshold);
     }
 
     /**
