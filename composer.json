@@ -27,7 +27,7 @@
     },
 
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7|~3.0"
+        "mink/driver-testsuite": "dev-master"
     },
 
     "autoload": {
