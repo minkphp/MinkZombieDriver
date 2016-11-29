@@ -506,32 +506,17 @@ var node = {$ref},
     type = node.type.toLowerCase();
 if (tagName == 'select') {
   if (node.multiple) {
-    var toSelect = [];
-    var toUnselect = [];
     var option;
     for (var i = 0; i < node.options.length; i++) {
       option = node.options[i];
-      if (option.selected && -1 === value.indexOf(option.value)) {
-        toUnselect.push(option);
-      } else if (!option.selected && -1 !== value.indexOf(option.value)) {
-        toSelect.push(option);
+      if (option.selected) {
+        browser.unselectOption(option);
       }
     }
 
-    if (0 === toSelect.length && toUnselect.length > 0) {
-      for (i = 1; i < toUnselect.length; i++) {
-        toUnselect[i].selected = false;
-      }
-      browser.unselectOption(toUnselect[0]);
-    } else if (toSelect.length) {
-      for (i = 0; i < toUnselect.length; i++) {
-        toUnselect[i].selected = false;
-      }
-      for (i = 1; i < toSelect.length; i++) {
-        toUnselect[i].selected = true;
-      }
-      browser.selectOption(toSelect[0]);
-    }
+    value.forEach(function(optionValue) {
+        browser.select(node, optionValue);
+    });
   } else {
     browser.select(node, value);
   }
