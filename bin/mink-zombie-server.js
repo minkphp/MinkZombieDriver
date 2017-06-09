@@ -6,6 +6,7 @@ var pointers = [];
 var buffer = '';
 var host = process.env.HOST || '127.0.0.1';
 var port = process.env.PORT || 8124;
+var options = process.env.OPTIONS ? JSON.parse(process.env.OPTIONS) : {};
 
 var zombieVersionCompare = function (v2, op) {
     var version_compare = function (v1, v2, operator) {
@@ -108,7 +109,7 @@ net.createServer(function (stream) {
 
     stream.on('end', function () {
         if (browser == null) {
-            browser = new zombie();
+            browser = new zombie(options);
 
             // Clean up old pointers
             pointers = [];
