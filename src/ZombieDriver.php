@@ -169,7 +169,7 @@ JS;
     {
         // Zombie expects session to be started prior to setting auth info.
         if (!$this->isStarted()) {
-          $this->start();
+            $this->start();
         }
 
         if (false === $user) {
