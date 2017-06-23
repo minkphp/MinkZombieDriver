@@ -39,6 +39,8 @@ class ZombieConfig extends AbstractConfig
                 'testHtml5FormButtonAttribute',
                 'testHtml5FormOutside',
                 'testHtml5FormRadioAttribute',
+                'testHtml5FormAction',
+                'testHtml5FormMethod',
             ))
         ) {
             return 'Zombie.js doesn\'t HTML5 form attributes. See https://github.com/assaf/zombie/issues/635';

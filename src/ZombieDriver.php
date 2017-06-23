@@ -167,6 +167,11 @@ JS;
      */
     public function setBasicAuth($user, $password)
     {
+        // Zombie expects session to be started prior to setting auth info.
+        if (!$this->isStarted()) {
+            $this->start();
+        }
+
         if (false === $user) {
             $user = null;
             $password = null;
