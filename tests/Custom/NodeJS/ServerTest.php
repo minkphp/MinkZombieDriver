@@ -17,9 +17,10 @@ class TestServer extends BaseServer
     protected function getServerScript()
     {
         return <<<JS
-var zombie = require('zombie')
-  , host   = process.env.HOST
-  , port   = process.env.PORT;
+var zombie  = require('zombie')
+  , host    = process.env.HOST
+  , port    = process.env.PORT
+  , options = process.env.OPTIONS ? JSON.parse(process.env.OPTIONS) : {};
 JS;
     }
 
@@ -58,11 +59,13 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/path/to/server', $server->getServerPath());
         $this->assertEquals(2000000, $server->getThreshold());
         $this->assertEquals('', $server->getNodeModulesPath());
+        $this->assertEquals(array(), $server->getOptions());
 
         $expected = <<<JS
-var zombie = require('zombie')
-  , host   = process.env.HOST
-  , port   = process.env.PORT;
+var zombie  = require('zombie')
+  , host    = process.env.HOST
+  , port    = process.env.PORT
+  , options = process.env.OPTIONS ? JSON.parse(process.env.OPTIONS) : {};
 JS;
         $this->assertEquals($expected, $server->serverScript);
     }
@@ -90,7 +93,8 @@ JS;
             null,
             null,
             5000000,
-            '../../'
+            '../../',
+            array('waitDuration' => '15s')
         );
 
         $this->assertEquals('123.123.123.123', $server->getHost());
@@ -99,11 +103,13 @@ JS;
         $this->assertEquals('/path/to/server', $server->getServerPath());
         $this->assertEquals(5000000, $server->getThreshold());
         $this->assertEquals('../../', $server->getNodeModulesPath());
+        $this->assertEquals(array('waitDuration' => '15s'), $server->getOptions());
 
         $expected = <<<JS
-var zombie = require('zombie')
-  , host   = process.env.HOST
-  , port   = process.env.PORT;
+var zombie  = require('zombie')
+  , host    = process.env.HOST
+  , port    = process.env.PORT
+  , options = process.env.OPTIONS ? JSON.parse(process.env.OPTIONS) : {};
 JS;
         $this->assertEquals($expected, $server->serverScript);
     }
@@ -156,6 +162,16 @@ JS;
     {
         $server = $this->getRunningServer();
         $server->setThreshold('test');
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Unable to change options of a running server.
+     */
+    public function testSetOptionsOnRunningServer()
+    {
+        $server = $this->getRunningServer();
+        $server->setOptions(array('waitDuration' => '15s'));
     }
 
     /**
