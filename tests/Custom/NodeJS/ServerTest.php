@@ -235,6 +235,16 @@ JS;
 
     /**
      * @expectedException  \InvalidArgumentException
+     * @expectedExceptionMessage Options must be specified as an array.
+     */
+    public function testSetOptionsWithInvalidArgument()
+    {
+        $server = new TestServer();
+        $server->setOptions('/invalid argument/');
+    }
+
+    /**
+     * @expectedException  \InvalidArgumentException
      */
     public function testCreateServerWithInvalidNodeModulesPath()
     {
