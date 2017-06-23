@@ -175,16 +175,6 @@ JS;
     }
 
     /**
-     * @expectedException  \InvalidArgumentException
-     * @expectedExceptionMessage Options must be specified as an array.
-     */
-    public function testSetOptionsWithInvalidArgument()
-    {
-        $server = new TestServer();
-        $server->setOptions('/invalid argument/');
-    }
-
-    /**
      * @group legacy
      */
     public function testCreateCustomServerWithPlaceholders()

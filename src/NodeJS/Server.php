@@ -286,15 +286,10 @@ abstract class Server
      *
      * @param array $options Options array
      *
-     * @throws \InvalidArgumentException Invalid path is invalid.
      * @throws \LogicException When server is already running.
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
-        if (!is_array($options)) {
-            throw new \InvalidArgumentException("Options must be specified as an array.");
-        }
-
         if ($this->isRunning()) {
             throw new \LogicException('Unable to change options of a running server.');
         }
