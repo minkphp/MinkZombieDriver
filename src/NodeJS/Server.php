@@ -48,7 +48,7 @@ abstract class Server
     /**
      * @var array
      */
-    protected $options;
+    private $options;
 
     /**
      * @var string The full path to the NodeJS modules directory.
