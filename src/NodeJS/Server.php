@@ -46,6 +46,11 @@ abstract class Server
     protected $threshold;
 
     /**
+     * @var array
+     */
+    private $options;
+
+    /**
      * @var string The full path to the NodeJS modules directory.
      */
     protected $nodeModulesPath;
@@ -69,6 +74,7 @@ abstract class Server
      * @param string $serverPath      Path to server script
      * @param int    $threshold       Threshold value in micro seconds
      * @param string $nodeModulesPath Path to node_modules directory
+     * @param array  $options         Options array for zombiejs
      */
     public function __construct(
         $host = '127.0.0.1',
@@ -76,7 +82,8 @@ abstract class Server
         $nodeBin = null,
         $serverPath = null,
         $threshold = 2000000,
-        $nodeModulesPath = ''
+        $nodeModulesPath = '',
+        $options = array()
     ) {
         if (null === $nodeBin) {
             $nodeBin = 'node';
@@ -97,6 +104,7 @@ abstract class Server
 
         $this->setServerPath($serverPath);
         $this->setThreshold($threshold);
+        $this->setOptions($options);
     }
 
     /**
@@ -274,6 +282,32 @@ abstract class Server
     }
 
     /**
+     * Setter options value
+     *
+     * @param array $options Options array
+     *
+     * @throws \LogicException When server is already running.
+     */
+    public function setOptions(array $options)
+    {
+        if ($this->isRunning()) {
+            throw new \LogicException('Unable to change options of a running server.');
+        }
+
+        $this->options = $options;
+    }
+
+    /**
+     * Getter options value
+     *
+     * @return array Options array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
      * Getter process object
      *
      * @return Process The process object
@@ -321,6 +355,10 @@ abstract class Server
 
             if (!empty($this->nodeModulesPath)) {
                 $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+            }
+
+            if (!empty($this->options)) {
+                $processBuilder->setEnv('OPTIONS', json_encode($this->options));
             }
 
             $process = $processBuilder->getProcess();
