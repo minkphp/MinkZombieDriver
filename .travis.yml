@@ -20,7 +20,7 @@ before_install:
   - npm --version
 
 install:
-  - npm install $NODE_VERSION
+  - nvm install $NODE_VERSION
   - npm install zombie$ZOMBIE_VERSION
   - composer install
 
