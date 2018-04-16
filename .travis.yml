@@ -11,7 +11,7 @@ php: [7.1]
 env:
   global:
     - NODE_VERSION='8'
-    - ZOMBIE_VERSION='@^3.0' # npm will install Zombie 4.x by default, even though it is not compatible with the version of node available on Travis.
+    - ZOMBIE_VERSION='@^6.0' # npm will install Zombie 4.x by default, even though it is not compatible with the version of node available on Travis.
     # Force binding to IPv4 as Zombie and PHP seem to have a different resolution for localhost on Travis.
     - MINK_HOST=127.0.0.1:8002
 
