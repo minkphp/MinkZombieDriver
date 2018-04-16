@@ -6,42 +6,26 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-php: [5.3, 5.4, 5.5, 5.6, 7.0, 7.1, hhvm]
+php: [7.1]
 
 env:
   global:
-    - NODE_VERSION=''
+    - NODE_VERSION='8'
     - ZOMBIE_VERSION='@^3.0' # npm will install Zombie 4.x by default, even though it is not compatible with the version of node available on Travis.
-    # Force using PHP 5.6 for the webserver to be able to run it on PHP 5.3 and HHVM jobs too
-    - MINK_PHP_BIN=~/.phpenv/versions/5.6/bin/php
     # Force binding to IPv4 as Zombie and PHP seem to have a different resolution for localhost on Travis.
     - MINK_HOST=127.0.0.1:8002
 
-matrix:
-  include:
-    - php: 5.6
-      env: ZOMBIE_VERSION='@^2.0'
-    - php: 5.6
-      env:
-        - NODE_VERSION='5.4.1'
-        - ZOMBIE_VERSION='@^4.0'
-
 before_install:
-  - if [[ "$NODE_VERSION" != "" ]]; then wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && tar xf node-v${NODE_VERSION}-linux-x64.tar.xz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"; fi
-
   - node --version
   - npm --version
 
 install:
-  - composer install
+  - npm install $NODE_VERSION
   - npm install zombie$ZOMBIE_VERSION
+  - composer install
 
 before_script:
    # Start a webserver for web fixtures.
   - vendor/bin/mink-test-server > /dev/null 2>&1 &
 
 script: phpunit -v --coverage-clover=coverage.clover
-
-after_script:
-  # XDebug is not yet available on PHP 7.1 so we don't have code coverage there. Not uploading it avoids telling Scrutinizer that it is missing
-  - if [[ "$TRAVIS_PHP_VERSION" != "7.1" ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
