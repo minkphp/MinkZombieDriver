@@ -127,7 +127,7 @@ browser.visit("{$url}", function (err) {
 JS;
         $out = $this->server->evalJS($js);
         if (!empty($out)) {
-            throw new DriverException(sprintf('Error when loading page %s: %s', $url, $out));
+            throw new DriverException(sprintf('Error when loading page %s: %s', $url, json_decode($out)));
         }
     }
 
