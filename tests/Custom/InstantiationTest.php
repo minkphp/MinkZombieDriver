@@ -3,8 +3,9 @@
 namespace Behat\Mink\Tests\Driver\Custom;
 
 use Behat\Mink\Driver\ZombieDriver;
+use Behat\Mink\Tests\Driver\TestCase;
 
-class InstantiationTest extends \PHPUnit_Framework_TestCase
+class InstantiationTest extends TestCase
 {
     public function testInstantiateWithServer()
     {
