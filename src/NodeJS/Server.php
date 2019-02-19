@@ -533,6 +533,9 @@ abstract class Server
         }
 
         $process = new Process($arguments, null, $env);
+        // to preserve the BC with symfony <3.3, we convert the array structure
+        // to a string structure to avoid the prefixing with the exec command
+        $process->setCommandLine($process->getCommandLine());
 
         // Keep back compatibility with symfony/process:v2.8 (required on PHP v5.3).
         if (method_exists($process, 'inheritEnvironmentVariables')) {
