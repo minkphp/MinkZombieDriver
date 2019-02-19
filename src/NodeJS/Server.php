@@ -10,7 +10,6 @@
 
 namespace Behat\Mink\Driver\NodeJS;
 
-use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\Process;
 
 /**
@@ -344,24 +343,9 @@ abstract class Server
             ));
         }
 
-        // Create process object if neccessary
+        // Create process object if necessary
         if (null === $process) {
-            $processBuilder = new ProcessBuilder(array(
-                $this->nodeBin,
-                $this->serverPath,
-            ));
-            $processBuilder->setEnv('HOST', $this->host)
-                ->setEnv('PORT', $this->port);
-
-            if (!empty($this->nodeModulesPath)) {
-                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
-            }
-
-            if (!empty($this->options)) {
-                $processBuilder->setEnv('OPTIONS', json_encode($this->options));
-            }
-
-            $process = $processBuilder->getProcess();
+            $process = $this->createProcess();
         }
         $this->process = $process;
 
@@ -528,4 +512,29 @@ abstract class Server
      * @return string The server's JavaScript code
      */
     abstract protected function getServerScript();
+
+    private function createProcess()
+    {
+        $arguments = array(
+            $this->nodeBin,
+            $this->serverPath,
+        );
+        $env = array(
+            'HOST' => $this->host,
+            'PORT' => $this->port,
+        );
+
+        if (!empty($this->nodeModulesPath)) {
+            $env['NODE_PATH'] = $this->nodeModulesPath;
+        }
+
+        if (!empty($this->options)) {
+            $env['OPTIONS'] = json_encode($this->options);
+        }
+
+        $process = new Process($arguments, null, $env);
+        $process->inheritEnvironmentVariables();
+
+        return $process;
+    }
 }
