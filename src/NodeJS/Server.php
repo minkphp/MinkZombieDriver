@@ -533,7 +533,11 @@ abstract class Server
         }
 
         $process = new Process($arguments, null, $env);
-        $process->inheritEnvironmentVariables();
+
+        // Keep back compatibility with symfony/process:v2.8 (required on PHP v5.3).
+        if (method_exists($process, 'inheritEnvironmentVariables')) {
+            $process->inheritEnvironmentVariables();
+        }
 
         return $process;
     }
