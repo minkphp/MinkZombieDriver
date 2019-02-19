@@ -34,12 +34,13 @@ before_install:
 install:
   - composer install
   - npm install zombie$ZOMBIE_VERSION
+  - vendor/bin/simple-phpunit install
 
 before_script:
    # Start a webserver for web fixtures.
   - vendor/bin/mink-test-server > /dev/null 2>&1 &
 
-script: phpunit -v --coverage-clover=coverage.clover
+script: vendor/bin/simple-phpunit -v --coverage-clover=coverage.clover
 
 after_script:
   # XDebug is not yet available on PHP 7.1 so we don't have code coverage there. Not uploading it avoids telling Scrutinizer that it is missing
