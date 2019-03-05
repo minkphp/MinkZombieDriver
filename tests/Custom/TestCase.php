@@ -14,10 +14,10 @@ if (class_exists('PHPUnit\Runner\Version') && version_compare(Version::id(), '6.
     {
     }
 
-} elseif (version_compare(\PHPUnit_Runner_Version::id(), '5.0.0', '>=')) {
+} elseif (version_compare(\PHPUnit_Runner_Version::id(), '4.0.0', '>=')) {
 
     /**
-     * Implementation for compatibility with PHPUnit 5.
+     * Implementation for compatibility with PHPUnit 4 and 5.
      */
     abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
