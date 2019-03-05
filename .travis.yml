@@ -6,11 +6,11 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-php: [5.3, 5.4, 5.5, 5.6, 7.0, 7.1, hhvm]
+php: [5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3]
 
 env:
   global:
-    - NODE_VERSION=''
+    - NODE_VERSION='6.17.0'  # node version needed for zombie 3.0
     - ZOMBIE_VERSION='@^3.0' # npm will install Zombie 4.x by default, even though it is not compatible with the version of node available on Travis.
     # Force using PHP 5.6 for the webserver to be able to run it on PHP 5.3 and HHVM jobs too
     - MINK_PHP_BIN=~/.phpenv/versions/5.6/bin/php
@@ -19,6 +19,8 @@ env:
 
 matrix:
   include:
+    - php: 5.3
+      dist: precise
     - php: 5.6
       env: ZOMBIE_VERSION='@^2.0'
     - php: 5.6
