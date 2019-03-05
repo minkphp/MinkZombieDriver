@@ -370,7 +370,6 @@ abstract class Server
                 null,
                 $env
             );
-            $process->inheritEnvironmentVariables();
         }
 
         $this->process = $process;
