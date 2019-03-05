@@ -375,15 +375,9 @@ abstract class Server
                     $this->nodeBin,
                     $this->serverPath,
                 ));
-                $processBuilder->setEnv('HOST', $this->host)
-                    ->setEnv('PORT', $this->port);
 
-                if (!empty($this->nodeModulesPath)) {
-                    $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
-                }
-
-                if (!empty($this->options)) {
-                    $processBuilder->setEnv('OPTIONS', json_encode($this->options));
+                foreach ($env as $key => $val) {
+                    $processBuilder->setEnv($key, $val);
                 }
 
                 $process = $processBuilder->getProcess();
