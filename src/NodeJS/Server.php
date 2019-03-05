@@ -344,24 +344,27 @@ abstract class Server
             ));
         }
 
-        // Create process object if neccessary
+        // Create process object if necessary
         if (null === $process) {
-            $processBuilder = new ProcessBuilder(array(
-                $this->nodeBin,
-                $this->serverPath,
-            ));
-            $processBuilder->setEnv('HOST', $this->host)
-                ->setEnv('PORT', $this->port);
+            array(
+                'HOST' => $this->host,
+                'PORT' => $this->port,
+            );
 
             if (!empty($this->nodeModulesPath)) {
-                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+                $env['NODE_PATH'] = $this->nodeModulesPath;
             }
 
             if (!empty($this->options)) {
-                $processBuilder->setEnv('OPTIONS', json_encode($this->options));
+                $env['OPTIONS'] = json_encode($this->options);
             }
 
-            $process = $processBuilder->getProcess();
+            $process = new Process(
+                $this->nodeBin,
+                $this->serverPath,
+                $env
+            );
+            $process->inheritEnvironmentVariables();
         }
         $this->process = $process;
 
