@@ -6,7 +6,7 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-php: [5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3]
+php: [5.4, 5.5, 5.6, 7.0, 7.1]
 
 env:
   global:
@@ -28,9 +28,14 @@ matrix:
       env:
         - NODE_VERSION='5.4.1'
         - ZOMBIE_VERSION='@^4.0'
+    - php: 7.2
+      env: PHPUNIT_VERSION='^6.0'
+    - php: 7.3
+      env: PHPUNIT_VERSION='^6.0'
 
 before_install:
-  - if [[ "$NODE_VERSION" != "" ]]; then wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && tar xf node-v${NODE_VERSION}-linux-x64.tar.xz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"; fi
+  - if [[ "${NODE_VERSION}" != "" ]]; then wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && tar xf node-v${NODE_VERSION}-linux-x64.tar.xz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"; fi
+  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}; fi
 
   - node --version
   - npm --version
