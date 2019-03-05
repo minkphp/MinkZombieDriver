@@ -67,13 +67,13 @@ abstract class Server
     /**
      * Constructor
      *
-     * @param string $host The server host
-     * @param int $port The server port
-     * @param string $nodeBin Path to NodeJS binary
-     * @param string $serverPath Path to server script
-     * @param int $threshold Threshold value in micro seconds
+     * @param string $host            The server host
+     * @param int    $port            The server port
+     * @param string $nodeBin         Path to NodeJS binary
+     * @param string $serverPath      Path to server script
+     * @param int    $threshold       Threshold value in micro seconds
      * @param string $nodeModulesPath Path to node_modules directory
-     * @param array $options Options array for zombiejs
+     * @param array  $options         Options array for zombiejs
      */
     public function __construct(
         $host = '127.0.0.1',
@@ -205,12 +205,10 @@ abstract class Server
     public function setNodeModulesPath($nodeModulesPath)
     {
         if (!is_dir($nodeModulesPath) || !preg_match('/\/$/', $nodeModulesPath)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "Node modules path '%s' is not a directory and/or does not end with a trailing '/'",
-                    $nodeModulesPath
-                )
-            );
+            throw new \InvalidArgumentException(sprintf(
+                "Node modules path '%s' is not a directory and/or does not end with a trailing '/'",
+                $nodeModulesPath
+            ));
         }
 
         if ($this->isRunning()) {
@@ -339,12 +337,10 @@ abstract class Server
     {
         // Check if the server script exists at given path
         if (false === $this->serverPath || false === is_file($this->serverPath)) {
-            throw new \RuntimeException(
-                sprintf(
-                    "Could not find server script at path '%s'",
-                    $this->serverPath
-                )
-            );
+            throw new \RuntimeException(sprintf(
+                "Could not find server script at path '%s'",
+                $this->serverPath
+            ));
         }
 
         // Create process object if necessary
@@ -370,6 +366,8 @@ abstract class Server
                 null,
                 $env
             );
+
+            $process->inheritEnvironmentVariables();
         }
 
         $this->process = $process;
@@ -448,7 +446,7 @@ abstract class Server
      * Checks the availability of the server triggers the evaluation
      * of a string of JavaScript code by {{Behat\Mink\Driver\NodeJS\Server::doEvalJS()}}
      *
-     * @param string $str String of JavaScript code
+     * @param string $str        String of JavaScript code
      * @param string $returnType Whether it should be eval'ed as JavaScript or wrapped in a JSON response
      *
      * @return mixed The eval'ed response
@@ -465,9 +463,9 @@ abstract class Server
      * JavaScript code for evaluation by the server and sending it over
      * the server connection socket
      *
-     * @param Connection $conn The server connection
-     * @param string $str String of JavaScript code
-     * @param string $returnType The return type
+     * @param Connection $conn       The server connection
+     * @param string     $str        String of JavaScript code
+     * @param string     $returnType The return type
      *
      * @return mixed The eval'ed response
      *
@@ -490,23 +488,19 @@ abstract class Server
 
             if ($this->process->isRunning()) {
                 $this->stop();
-                throw new \RuntimeException(
-                    sprintf(
-                        'Server did not respond in time: (%s) [Stopped]',
-                        $this->process->getExitCode()
-                    )
-                );
+                throw new \RuntimeException(sprintf(
+                    'Server did not respond in time: (%s) [Stopped]',
+                    $this->process->getExitCode()
+                ));
             }
         }
 
         if (!$this->process->isRunning()) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Server process has been terminated: (%s) [%s]',
-                    $this->process->getExitCode(),
-                    $this->process->getErrorOutput()
-                )
-            );
+            throw new \RuntimeException(sprintf(
+                'Server process has been terminated: (%s) [%s]',
+                $this->process->getExitCode(),
+                $this->process->getErrorOutput()
+            ));
         }
     }
 
@@ -518,20 +512,14 @@ abstract class Server
     protected function createTemporaryServer()
     {
         $rawServerScript = $this->getServerScript();
-        $serverScript = strtr(
-            $rawServerScript,
-            array(
-                '%host%' => $this->host,
-                '%port%' => $this->port,
-                '%modules_path%' => $this->nodeModulesPath,
-            )
-        );
+        $serverScript = strtr($rawServerScript, array(
+            '%host%'         => $this->host,
+            '%port%'         => $this->port,
+            '%modules_path%' => $this->nodeModulesPath,
+        ));
 
         if ($serverScript !== $rawServerScript) {
-            @trigger_error(
-                'Using the `%host%`, `%port%` and `%modules_path%` placeholders in the server script is deprecated since ZombieDriver 1.4 and will be removed in 2.0. Rely on the HOST, PORT and NODE_PATH environment variables instead.',
-                E_USER_DEPRECATED
-            );
+            @trigger_error('Using the `%host%`, `%port%` and `%modules_path%` placeholders in the server script is deprecated since ZombieDriver 1.4 and will be removed in 2.0. Rely on the HOST, PORT and NODE_PATH environment variables instead.', E_USER_DEPRECATED);
         }
 
         $serverPath = tempnam(sys_get_temp_dir(), 'mink_nodejs_server');
