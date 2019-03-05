@@ -27,7 +27,8 @@
     },
 
     "require-dev": {
-        "mink/driver-testsuite": "dev-master"
+        "mink/driver-testsuite": "dev-master",
+        "phpunit/phpunit": "^6.0"
     },
 
     "autoload": {
