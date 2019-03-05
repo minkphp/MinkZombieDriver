@@ -21,9 +21,11 @@ matrix:
   include:
     - php: 5.3
       dist: precise
-      env: NODE_VERSION='0.10.36'
+      env:
+        - NODE_VERSION='0.10.36'
+        - PHPUNIT_VERSION='^4.8'
     - php: 5.5
-      env: PHPUNIT_VERSION='^5.4'
+      env: PHPUNIT_VERSION='^4.8'
     - php: 5.6
       env: ZOMBIE_VERSION='@^2.0'
     - php: 5.6
