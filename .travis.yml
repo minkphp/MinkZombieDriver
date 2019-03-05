@@ -34,6 +34,7 @@ before_install:
 
   - node --version
   - npm --version
+  - phpunit --version
 
 install:
   - composer install
