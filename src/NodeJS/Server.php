@@ -11,6 +11,7 @@
 namespace Behat\Mink\Driver\NodeJS;
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Abstract base class to start and connect to a NodeJS server process.
@@ -358,16 +359,35 @@ abstract class Server
                 $env['OPTIONS'] = json_encode($this->options);
             }
 
-            $process = new Process(
-                array(
+            if (method_exists('\Symfony\Component\Process\Process', 'inheritEnvironmentVariables')) {
+                $process = new Process(
+                    array(
+                        $this->nodeBin,
+                        $this->serverPath,
+                    ),
+                    null,
+                    $env
+                );
+
+                $process->inheritEnvironmentVariables();
+            } else {
+                $processBuilder = new ProcessBuilder(array(
                     $this->nodeBin,
                     $this->serverPath,
-                ),
-                null,
-                $env
-            );
+                ));
+                $processBuilder->setEnv('HOST', $this->host)
+                    ->setEnv('PORT', $this->port);
 
-            $process->inheritEnvironmentVariables();
+                if (!empty($this->nodeModulesPath)) {
+                    $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+                }
+
+                if (!empty($this->options)) {
+                    $processBuilder->setEnv('OPTIONS', json_encode($this->options));
+                }
+
+                $process = $processBuilder->getProcess();
+            }
         }
 
         $this->process = $process;
