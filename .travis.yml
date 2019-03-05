@@ -37,7 +37,7 @@ matrix:
 
 before_install:
   - if [[ "${NODE_VERSION}" != "" ]]; then wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz && tar xf node-v${NODE_VERSION}-linux-x64.tar.xz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"; fi
-  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then composer global require phpunit/phpunit:${PHPUNIT_VERSION}; fi
+  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then composer require phpunit/phpunit:${PHPUNIT_VERSION}; fi
 
   - node --version
   - npm --version
@@ -48,10 +48,14 @@ install:
   - npm install zombie$ZOMBIE_VERSION
 
 before_script:
-   # Start a webserver for web fixtures.
+  # Start a webserver for web fixtures.
   - vendor/bin/mink-test-server > /dev/null 2>&1 &
 
-script: phpunit -v --coverage-clover=coverage.clover
+  # Set the PHPUnit executable to the local or global one
+  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then PHPUNIT_CMD=vendor/bin/phpunit; else PHPUNIT_CMD=phpunit; fi
+
+script:
+  - ${PHPUNIT_CMD} -v --coverage-clover=coverage.clover
 
 after_script:
   # XDebug is not yet available on PHP 7.1 so we don't have code coverage there. Not uploading it avoids telling Scrutinizer that it is missing
