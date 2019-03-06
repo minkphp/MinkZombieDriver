@@ -10,7 +10,7 @@ php: [5.4, 5.6, 7.0, 7.1]
 
 env:
   global:
-    # node version needed for zombie 3.0.
+    # Node version needed for zombie 3.0.
     - NODE_VERSION='6.17.0'
     # npm will install Zombie 4.x by default, even though it is not compatible with the version of node available on Travis.
     - ZOMBIE_VERSION='@^3.0'
@@ -37,6 +37,11 @@ matrix:
         - ZOMBIE_VERSION='@^4.0'
     - php: 7.2
       env: PHPUNIT_VERSION='^6.0'
+    - php: 7.1
+      env:
+        - NODE_VERSION=''
+        - ZOMBIE_VERSION=''
+        - PHPUNIT_VERSION='^6.0'
     - php: 7.3
       env: PHPUNIT_VERSION='^6.0'
 
@@ -55,7 +60,7 @@ install:
 
 before_script:
   # Start a webserver for web fixtures.
-  - vendor/bin/mink-test-server &
+  - vendor/bin/mink-test-server > /dev/null 2>&1 &
 
   # Set the PHPUnit executable to the local or global one
   - if [[ "${PHPUNIT_VERSION}" != "" ]]; then PHPUNIT_CMD=vendor/bin/phpunit; else PHPUNIT_CMD=phpunit; fi
