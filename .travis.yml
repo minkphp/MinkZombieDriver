@@ -24,6 +24,7 @@ matrix:
       env:
         - NODE_VERSION='0.10.48'
         - PHPUNIT_VERSION='^4.8'
+        - SYMFONY_PHPUNIT_BRIDGE_VERSION='4.0.*'
     - php: 5.5
       env: PHPUNIT_VERSION='^4.8'
     - php: 5.6
@@ -39,7 +40,9 @@ matrix:
 
 before_install:
   - wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz && tar xfz node-v${NODE_VERSION}-linux-x64.tar.gz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"
-  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then composer require phpunit/phpunit:${PHPUNIT_VERSION}; fi
+
+  - if [[ "${PHPUNIT_VERSION}" != "" ]]; then composer require --dev phpunit/phpunit:${PHPUNIT_VERSION}; fi
+  - if [[ "${SYMFONY_PHPUNIT_BRIDGE_VERSION}" != "" ]]; then composer require --dev symfony/phpunit-bridge:${SYMFONY_PHPUNIT_BRIDGE_VERSION}; fi
 
   - node --version
   - npm --version
