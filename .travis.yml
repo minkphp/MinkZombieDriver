@@ -35,11 +35,6 @@ matrix:
       env:
         - NODE_VERSION='5.4.1'
         - ZOMBIE_VERSION='@^4.0'
-    - php: 7.1
-      env:
-        - NODE_VERSION='11.10.1'
-        - ZOMBIE_VERSION=''
-        - PHPUNIT_VERSION='^6.0'
     - php: 7.2
       env: PHPUNIT_VERSION='^6.0'
     - php: 7.3
