@@ -10,8 +10,8 @@
 
 namespace Behat\Mink\Driver\NodeJS;
 
-use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * Abstract base class to start and connect to a NodeJS server process.
@@ -344,25 +344,46 @@ abstract class Server
             ));
         }
 
-        // Create process object if neccessary
+        // Create process object if necessary
         if (null === $process) {
-            $processBuilder = new ProcessBuilder(array(
-                $this->nodeBin,
-                $this->serverPath,
-            ));
-            $processBuilder->setEnv('HOST', $this->host)
-                ->setEnv('PORT', $this->port);
+            $env = array(
+                'HOST' => $this->host,
+                'PORT' => $this->port,
+            );
 
             if (!empty($this->nodeModulesPath)) {
-                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+                $env['NODE_PATH'] = $this->nodeModulesPath;
             }
 
             if (!empty($this->options)) {
-                $processBuilder->setEnv('OPTIONS', json_encode($this->options));
+                $env['OPTIONS'] = json_encode($this->options);
             }
 
-            $process = $processBuilder->getProcess();
+            if (method_exists('\Symfony\Component\Process\Process', 'inheritEnvironmentVariables')) {
+                $process = new Process(
+                    array(
+                        $this->nodeBin,
+                        $this->serverPath,
+                    ),
+                    null,
+                    $env
+                );
+
+                $process->inheritEnvironmentVariables();
+            } else {
+                $processBuilder = new ProcessBuilder(array(
+                    $this->nodeBin,
+                    $this->serverPath,
+                ));
+
+                foreach ($env as $key => $val) {
+                    $processBuilder->setEnv($key, $val);
+                }
+
+                $process = $processBuilder->getProcess();
+            }
         }
+
         $this->process = $process;
 
         // Start server process

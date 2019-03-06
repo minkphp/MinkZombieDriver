@@ -4,6 +4,7 @@ namespace Behat\Mink\Tests\Driver\Custom\NodeJS;
 
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server as BaseServer;
+use PHPUnit\Framework\TestCase;
 
 class TestServer extends BaseServer
 {
@@ -47,7 +48,7 @@ JS;
     }
 }
 
-class ServerTest extends \PHPUnit_Framework_TestCase
+class ServerTest extends TestCase
 {
     public function testCreateServerWithDefaults()
     {
