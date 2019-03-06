@@ -37,11 +37,6 @@ matrix:
         - ZOMBIE_VERSION='@^4.0'
     - php: 7.2
       env: PHPUNIT_VERSION='^6.0'
-    - php: 7.1
-      env:
-        - NODE_VERSION=''
-        - ZOMBIE_VERSION=''
-        - PHPUNIT_VERSION='^6.0'
     - php: 7.3
       env: PHPUNIT_VERSION='^6.0'
 
@@ -60,7 +55,7 @@ install:
 
 before_script:
   # Start a webserver for web fixtures.
-  - vendor/bin/mink-test-server > /dev/null 2>&1 &
+  - vendor/bin/mink-test-server  &
 
   # Set the PHPUnit executable to the local or global one
   - if [[ "${PHPUNIT_VERSION}" != "" ]]; then PHPUNIT_CMD=vendor/bin/phpunit; else PHPUNIT_CMD=phpunit; fi
