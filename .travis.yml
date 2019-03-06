@@ -35,10 +35,17 @@ matrix:
       env:
         - NODE_VERSION='5.4.1'
         - ZOMBIE_VERSION='@^4.0'
+    - php: 7.1
+      env:
+        - NODE_VERSION='11.10.1'
+        - ZOMBIE_VERSION=''
+        - PHPUNIT_VERSION='^6.0'
     - php: 7.2
       env: PHPUNIT_VERSION='^6.0'
     - php: 7.3
-      env: PHPUNIT_VERSION='^6.0'
+      env:
+        - PHPUNIT_VERSION='^6.0'
+        - MINK_PHP_BIN=~/.phpenv/versions/7.1/bin/php
 
 before_install:
   - wget https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz && tar xfz node-v${NODE_VERSION}-linux-x64.tar.gz && export PATH="`pwd`/node-v${NODE_VERSION}-linux-x64/bin:$PATH"
@@ -55,7 +62,7 @@ install:
 
 before_script:
   # Start a webserver for web fixtures.
-  - vendor/bin/mink-test-server  &
+  - vendor/bin/mink-test-server > /dev/null 2>&1 &
 
   # Set the PHPUnit executable to the local or global one
   - if [[ "${PHPUNIT_VERSION}" != "" ]]; then PHPUNIT_CMD=vendor/bin/phpunit; else PHPUNIT_CMD=phpunit; fi
