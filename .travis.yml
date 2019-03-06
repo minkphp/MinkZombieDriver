@@ -53,7 +53,7 @@ install:
 
 before_script:
   # Start a webserver for web fixtures.
-  - vendor/bin/mink-test-server > /dev/null 2>&1 &
+  - vendor/bin/mink-test-server &
 
   # Set the PHPUnit executable to the local or global one
   - if [[ "${PHPUNIT_VERSION}" != "" ]]; then PHPUNIT_CMD=vendor/bin/phpunit; else PHPUNIT_CMD=phpunit; fi
