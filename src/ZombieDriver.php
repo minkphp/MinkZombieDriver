@@ -115,6 +115,11 @@ JS;
         // Cleanup cached references
         $this->nativeRefs = array();
 
+        // Urlencode non-ascii characters
+        $url = preg_replace_callback('/[^\x20-\x7f]/', function($match) {
+            return urlencode($match[0]);
+        }, $url);
+
         $js = <<<JS
 pointers = [];
 browser.visit("{$url}", function (err) {
