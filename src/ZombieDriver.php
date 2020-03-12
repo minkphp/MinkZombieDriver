@@ -483,7 +483,7 @@ if (tagName == "input") {
     if (idx >= 0) {
       value = node.options.item(idx).value;
     } else {
-      value = null;
+      value = '';
     }
   }
 } else {
@@ -570,6 +570,9 @@ if (tagName == 'select') {
       throw new Error('The radio group "' + name + '" does not have an option "' + value + '"');
     }
   }
+}
+else if (type == 'file') {
+  browser.attach(node, value);
 } else {
   browser.fill(node, value);
 }
@@ -918,7 +921,9 @@ e.ctrlKey = {$isCtrlKeyArg};
 e.altKey = {$isAltKeyArg};
 e.shiftKey = {$isShiftKeyArg};
 e.metaKey = {$isMetaKeyArg};
-e.keyCode = {$char};
+e.charCode = {$char};
+e.keyCode = {$char}; // deprecated.
+e.which = {$char}; // deprecated.
 node.dispatchEvent(e);
 stream.end();
 JS;

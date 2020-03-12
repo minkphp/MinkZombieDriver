@@ -10,7 +10,6 @@
 
 namespace Behat\Mink\Driver\NodeJS;
 
-use Symfony\Component\Process\ProcessBuilder;
 use Symfony\Component\Process\Process;
 
 /**
@@ -344,24 +343,46 @@ abstract class Server
             ));
         }
 
-        // Create process object if neccessary
+        // Create process object if necessary
         if (null === $process) {
-            $processBuilder = new ProcessBuilder(array(
-                $this->nodeBin,
-                $this->serverPath,
-            ));
-            $processBuilder->setEnv('HOST', $this->host)
-                ->setEnv('PORT', $this->port);
+            $env = array(
+                'HOST' => $this->host,
+                'PORT' => $this->port,
+            );
 
             if (!empty($this->nodeModulesPath)) {
-                $processBuilder->setEnv('NODE_PATH', $this->nodeModulesPath);
+                $env['NODE_PATH'] = $this->nodeModulesPath;
             }
 
             if (!empty($this->options)) {
-                $processBuilder->setEnv('OPTIONS', json_encode($this->options));
+                $env['OPTIONS'] = json_encode($this->options);
             }
 
-            $process = $processBuilder->getProcess();
+            $arguments = array($this->nodeBin, $this->serverPath);
+
+            if (\method_exists('Symfony\Component\Process\Process', 'escapeArgument')) {
+                // This is preferred way.
+                $commandLine = $arguments;
+            } else {
+                // This behavior is deprecated since Symfony 4.2.
+                $commandLine = implode(
+                    ' ',
+                    array_map(array('Symfony\Component\Process\ProcessUtils', 'escapeArgument'), $arguments)
+                );
+
+                // Replace environment inheritance as was done by ProcessBuilder.
+                $env = array_replace($_ENV, $_SERVER, $env);
+            }
+
+            $process = new Process($commandLine, null, $env);
+            // to preserve the BC with symfony <3.3, we convert the array structure
+            // to a string structure to avoid the prefixing with the exec command
+            $process->setCommandLine($process->getCommandLine());
+
+            // Method was added in Symfony 3.2 and will be removed in Symfony 5.
+            if (\method_exists($process, 'inheritEnvironmentVariables')) {
+                $process->inheritEnvironmentVariables();
+            }
         }
         $this->process = $process;
 
