@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  MINK_HOST: '127.0.0.1:8002'
+
+jobs:
+
+  tests:
+    name: Tests (PHP ${{ matrix.php }}, Node ${{ matrix.node }}, Zombie ${{ matrix.zombie }} )
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+        zombie: [ '@^5.0' ]
+        node: [ '16' ]
+        include:
+          - php: '7.4'
+            node: '5'
+            zombie: '@^3.0'
+          - php: '7.4'
+            node: '10'
+            zombie: '@^4.0'
+          - php: '5.6'
+            node: '5'
+            zombie: '@^2.0'
+      fail-fast: false
+    env:
+      MATRIX_PHP: ${{ matrix.php }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "xdebug"
+          php-version: "${{ matrix.php }}"
+          tools: composer
+          # PHP 7.1 development web server segfaults if timezone not set.
+          ini-values: date.timezone=Europe/Paris, error_reporting=-1, display_errors=On
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "${{ matrix.node }}"
+
+      - name: Configure for PHP >= 7.1
+        if: "${{ matrix.php >= '7.1' }}"
+        run: |
+          composer require --no-update --dev symfony/error-handler "^4.4 || ^5.0"
+
+      - name: Install dependencies
+        run: |
+          composer update --no-interaction --prefer-dist
+
+      - name: Install Zombie
+        run: |
+          npm install zombie${{ matrix.zombie }}
+
+      - name: Setup Mink test server
+        run: |
+          mkdir ./logs
+          ./vendor/bin/mink-test-server &> ./logs/mink-test-server.log &
+
+      - name: Wait for browser & PHP to start
+        run: |
+          while ! nc -z localhost 8002 </dev/null; do echo Waiting for PHP server to start...; sleep 1; done
+
+      - name: Run tests
+        run: |
+          vendor/bin/phpunit -v --coverage-clover=coverage.clover
+
+      - name: Upload code coverage
+        if: "${{ matrix.php > '5.4' }}"
+        run: |
+          composer require scrutinizer/ocular
+          vendor/bin/ocular code-coverage:upload --repository=g/minkphp/MinkZombieDriver --format=php-clover coverage.clover
+
+      - name: Archive logs artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs_php-${{ matrix.php }}
+          path: |
+            logs

@@ -3,12 +3,18 @@
 namespace Behat\Mink\Tests\Driver\Custom;
 
 use Behat\Mink\Driver\ZombieDriver;
+use PHPUnit\Framework\TestCase;
 
-class InstantiationTest extends \PHPUnit_Framework_TestCase
+class InstantiationTest extends TestCase
 {
     public function testInstantiateWithServer()
     {
-        $server = $this->prophesize('\Behat\Mink\Driver\NodeJS\Server\ZombieServer')->reveal();
+        if (method_exists($this, 'createMock')) {
+            $server = $this->createMock('\Behat\Mink\Driver\NodeJS\Server\ZombieServer');
+        }
+        else {
+            $server = $this->prophesize('\Behat\Mink\Driver\NodeJS\Server\ZombieServer')->reveal();
+        }
 
         $driver = new ZombieDriver($server);
 

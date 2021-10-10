@@ -57,7 +57,6 @@ class ZombieConfig extends AbstractConfig
             return 'Zombie does not trigger the keyup event when writing a value in a text input to simulate keyboard';
         }
 
-
         return parent::skipMessage($testCase, $test);
     }
 }

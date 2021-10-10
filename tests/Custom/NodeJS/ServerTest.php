@@ -4,6 +4,8 @@ namespace Behat\Mink\Tests\Driver\Custom\NodeJS;
 
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server as BaseServer;
+use PHPUnit\Framework\TestCase;
+use Yoast\PHPUnitPolyfills\Polyfills\ExpectException;
 
 class TestServer extends BaseServer
 {
@@ -47,8 +49,10 @@ JS;
     }
 }
 
-class ServerTest extends \PHPUnit_Framework_TestCase
+class ServerTest extends TestCase
 {
+    use ExpectException;
+
     public function testCreateServerWithDefaults()
     {
         $server = new TestServer();
@@ -114,62 +118,50 @@ JS;
         $this->assertEquals($expected, $server->serverScript);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change host of a running server.
-     */
     public function testSetHostOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change host of a running server.');
         $server = $this->getRunningServer();
         $server->setHost('123.123.123.123');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change port of a running server.
-     */
     public function testSetPortOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change port of a running server.');
         $server = $this->getRunningServer();
         $server->setPort(1234);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change node bin of a running server.
-     */
     public function testSetNodeBinOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change node bin of a running server.');
         $server = $this->getRunningServer();
         $server->setNodeBin('test');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change server path of a running server.
-     */
     public function testSetServerPathOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change server path of a running server.');
         $server = $this->getRunningServer();
         $server->setServerPath('test');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change threshold of a running server.
-     */
     public function testSetThresholdOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change threshold of a running server.');
         $server = $this->getRunningServer();
         $server->setThreshold('test');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change options of a running server.
-     */
     public function testSetOptionsOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change options of a running server.');
         $server = $this->getRunningServer();
         $server->setOptions(array('waitDuration' => '15s'));
     }
@@ -205,57 +197,45 @@ JS;
         $this->assertEquals('../../', $server->getNodeModulesPath());
     }
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     */
     public function testSetNodeModulesPathWithInvalidPath()
     {
+        $this->expectException('\InvalidArgumentException');
         $server = new TestServer();
         $server->setNodeModulesPath('/does/not/exist/');
     }
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     */
     public function testSetNodeModulesPathWithoutTrailingSlash()
     {
+        $this->expectException('\InvalidArgumentException');
         $server = new TestServer();
         $server->setNodeModulesPath('../..');
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to change node modules path of a running server.
-     */
     public function testSetNodeModulesPathOnRunningServer()
     {
+        $this->expectException('\LogicException');
+        $this->expectExceptionMessage('Unable to change node modules path of a running server.');
         $server = $this->getRunningServer();
         $server->setNodeModulesPath('../../');
     }
 
-    /**
-     * @expectedException  \InvalidArgumentException
-     */
     public function testCreateServerWithInvalidNodeModulesPath()
     {
+        $this->expectException('\InvalidArgumentException');
         new TestServer('127.0.0.1', 8124, null, null, 2000000, '../..');
     }
 
-    /**
-     * @expectedException  \RuntimeException
-     */
     public function testStartServerWithNonExistingServerScript()
     {
+        $this->expectException('\RuntimeException');
         $server = new TestServer('127.0.0.1', 8124, null, '/does/not/exist');
         $server->start();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Server did not respond in time: (1) [Stopped]
-     */
     public function testStartServerThatDoesNotRespondInTime()
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Server did not respond in time: (1) [Stopped]');
         $process = $this->getNotRespondingServerProcessMock();
         $process->expects($this->once())
                 ->method('start');
@@ -266,12 +246,10 @@ JS;
         $server->start($process);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Server process has been terminated: (1) [TROLOLOLO]
-     */
     public function testStartServerThatWasTerminated()
     {
+        $this->expectException('\RuntimeException');
+        $this->expectExceptionMessage('Server process has been terminated: (1) [TROLOLOLO]');
         $process = $this->getTerminatedServerProcessMock();
         $process->expects($this->once())
                 ->method('start');
