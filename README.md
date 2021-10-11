@@ -4,9 +4,7 @@ Mink Zombie.js Driver
 [![Latest Stable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/stable.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
 [![Latest Unstable Version](https://poser.pugx.org/behat/mink-zombie-driver/v/unstable.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
 [![Total Downloads](https://poser.pugx.org/behat/mink-zombie-driver/downloads.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
-[![Build Status](https://travis-ci.org/minkphp/MinkZombieDriver.svg?branch=master)](https://travis-ci.org/minkphp/MinkZombieDriver)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/minkphp/MinkZombieDriver/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/minkphp/MinkZombieDriver/)
-[![Code Coverage](https://scrutinizer-ci.com/g/minkphp/MinkZombieDriver/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/minkphp/MinkZombieDriver/)
+[![CI](https://github.com/minkphp/MinkZombieDriver/actions/workflows/tests.yml/badge.svg)](https://github.com/minkphp/MinkZombieDriver/actions/workflows/tests.yml)
 [![License](https://poser.pugx.org/behat/mink-zombie-driver/license.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
 
 Installation & Compatibility
