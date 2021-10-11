@@ -3,3 +3,7 @@ composer.phar
 composer.lock
 phpunit.xml
 node_modules
+.phpunit.result.cache
+package.json
+package-lock.json
+logs/
