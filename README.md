@@ -12,9 +12,9 @@ Mink Zombie.js Driver
 Installation & Compatibility
 ----------------------------
 
-You need a working installation of [NodeJS](http://nodejs.org/) and
-[npm](https://npmjs.org/). Install the
-[zombie.js](http://zombie.labnotes.org) library through npm:
+You need a working installation of [NodeJS](https://nodejs.org/) and
+[npm](https://www.npmjs.com/). Install the
+[zombie.js](https://zombie.js.org/) library through npm:
 
 ``` bash
 $ npm install -g zombie
@@ -68,4 +68,4 @@ Copyright (c) 2011-2012 Pascal Cremer <b00gizm@gmail.com>
 Maintainers
 -----------
 
-* Alexander Obuhovich [aik099](http://github.com/aik099)
+* Alexander Obuhovich [aik099](https://github.com/aik099)

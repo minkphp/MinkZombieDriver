@@ -2,7 +2,7 @@
     "name":         "behat/mink-zombie-driver",
     "description":  "Zombie.js driver for Mink framework",
     "keywords":     ["zombie", "headless", "javascript", "ajax", "testing", "browser"],
-    "homepage":     "http://mink.behat.org/",
+    "homepage":     "https://mink.behat.org/",
     "type":         "mink-driver",
     "license":      "MIT",
 
@@ -10,7 +10,7 @@
         {
             "name":      "Pascal Cremer",
             "email":     "b00gizm@gmail.com",
-            "homepage":  "http://github.com/b00gizm"
+            "homepage":  "https://github.com/b00gizm"
         },
         {
             "name":      "Konstantin Kudryashov",
