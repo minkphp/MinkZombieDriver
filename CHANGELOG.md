@@ -1,3 +1,27 @@
+1.5.0 / 2021-10-11
+==================
+
+New features:
+
+* Ensured that the zombie process is stopped no matter how the PHP shutdowns
+* Added error to forbid accidental reconfiguration of a running zombie server
+* Added validation of arguments when instantiating the zombie server
+* Added support for configuring zombie.js options
+* Added support for `symfony/process` 4 and 5
+
+Removed:
+
+* Removed support for PHP 5.3
+
+Bug fixes:
+
+* Fixed the compatibility with installing zombie.js with npm 3+
+
+Testsuite:
+
+* Added CI jobs running on PHP 7.2, 7.3, 7.4, 8.0 and 8.1
+* Migrated to the shared testsuite in `mink/driver-testsuite`
+
 1.4.0 / 2016-03-05
 ==================
 
