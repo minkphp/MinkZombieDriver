@@ -9,12 +9,7 @@ class InstantiationTest extends TestCase
 {
     public function testInstantiateWithServer()
     {
-        if (method_exists($this, 'createMock')) {
-            $server = $this->createMock('\Behat\Mink\Driver\NodeJS\Server\ZombieServer');
-        }
-        else {
-            $server = $this->prophesize('\Behat\Mink\Driver\NodeJS\Server\ZombieServer')->reveal();
-        }
+        $server = $this->createMock('\Behat\Mink\Driver\NodeJS\Server\ZombieServer');
 
         $driver = new ZombieDriver($server);
 

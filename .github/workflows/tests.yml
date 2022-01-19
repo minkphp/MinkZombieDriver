@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        php: [ '5.4', '5.5', '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0', '8.1' ]
+        php: [ '7.2', '7.3', '7.4', '8.0', '8.1' ]
         zombie: [ '@^5.0' ]
         node: [ '16' ]
         include:
@@ -28,7 +28,7 @@ jobs:
           - php: '7.4'
             node: '10'
             zombie: '@^4.0'
-          - php: '5.6'
+          - php: '7.2'
             node: '5'
             zombie: '@^2.0'
       fail-fast: false
@@ -54,11 +54,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: "${{ matrix.node }}"
-
-      - name: Configure for PHP >= 7.1
-        if: "${{ matrix.php >= '7.1' }}"
-        run: |
-          composer require --no-update --dev symfony/error-handler "^4.4 || ^5.0"
 
       - name: Install dependencies
         run: |
