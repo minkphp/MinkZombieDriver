@@ -329,7 +329,7 @@ abstract class Server
     /**
      * Starts the server process
      *
-     * @param Process $process A process object
+     * @param Process|null $process A process object
      *
      * @throws \RuntimeException
      */
@@ -358,34 +358,7 @@ abstract class Server
             }
             $arguments = array($this->nodeBin, $this->serverPath);
 
-            if (\method_exists('Symfony\Component\Process\Process', 'escapeArgument')) {
-                // This is preferred way.
-                $commandLine = $arguments;
-            } else {
-                // This behavior is deprecated since Symfony 4.2.
-                $commandLine = implode(
-                    ' ',
-                    array_map(array('Symfony\Component\Process\ProcessUtils', 'escapeArgument'), $arguments)
-                );
-
-                // Replace environment inheritance as was done by ProcessBuilder.
-                $env = array_replace($_ENV, $_SERVER, $env);
-            }
-
-            $process = new Process($commandLine, null, $env);
-            // Symfony versions prior to 4.
-            if (!method_exists($process, 'fromShellCommandline')) {
-                if (\method_exists($process, 'setCommandLine')) {
-                    // to preserve the BC with symfony <3.3, we convert the array structure
-                    // to a string structure to avoid the prefixing with the exec command
-                    $process->setCommandLine($process->getCommandLine());
-                }
-
-                // Method was added in Symfony 3.2 and will be removed in Symfony 5.
-                if (\method_exists($process, 'inheritEnvironmentVariables')) {
-                    $process->inheritEnvironmentVariables();
-                }
-            }
+            $process = new Process($arguments, null, $env);
         }
         $this->process = $process;
 
@@ -435,7 +408,7 @@ abstract class Server
     /**
      * Restarts the server process
      *
-     * @param Process $process A process object
+     * @param Process|null $process A process object
      */
     public function restart(Process $process = null)
     {

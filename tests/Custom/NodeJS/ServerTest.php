@@ -5,7 +5,6 @@ namespace Behat\Mink\Tests\Driver\Custom\NodeJS;
 use Behat\Mink\Driver\NodeJS\Connection;
 use Behat\Mink\Driver\NodeJS\Server as BaseServer;
 use PHPUnit\Framework\TestCase;
-use Yoast\PHPUnitPolyfills\Polyfills\ExpectException;
 
 class TestServer extends BaseServer
 {
@@ -51,8 +50,6 @@ JS;
 
 class ServerTest extends TestCase
 {
-    use ExpectException;
-
     public function testCreateServerWithDefaults()
     {
         $server = new TestServer();
