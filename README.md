@@ -6,6 +6,7 @@ Mink Zombie.js Driver
 [![Total Downloads](https://poser.pugx.org/behat/mink-zombie-driver/downloads.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
 [![CI](https://github.com/minkphp/MinkZombieDriver/actions/workflows/tests.yml/badge.svg)](https://github.com/minkphp/MinkZombieDriver/actions/workflows/tests.yml)
 [![License](https://poser.pugx.org/behat/mink-zombie-driver/license.svg)](https://packagist.org/packages/behat/mink-zombie-driver)
+[![codecov](https://codecov.io/gh/minkphp/MinkZombieDriver/branch/master/graph/badge.svg?token=q3KjYserBP)](https://codecov.io/gh/minkphp/MinkZombieDriver)
 
 Installation & Compatibility
 ----------------------------
