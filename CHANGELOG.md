@@ -1,3 +1,15 @@
+1.6.0 / 2022-03-28
+==================
+
+New features:
+
+* Added support for `symfony/process` 6
+
+Removed:
+
+* Removed support for PHP <7.2
+* Removed support for `symfony/process` <4.4
+
 1.5.0 / 2021-10-11
 ==================
 
