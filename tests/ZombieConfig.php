@@ -4,6 +4,10 @@ namespace Behat\Mink\Tests\Driver;
 
 use Behat\Mink\Driver\NodeJS\Server\ZombieServer;
 use Behat\Mink\Driver\ZombieDriver;
+use Behat\Mink\Tests\Driver\Basic\IFrameTest;
+use Behat\Mink\Tests\Driver\Basic\ScreenshotTest;
+use Behat\Mink\Tests\Driver\Js\JavascriptTest;
+use Behat\Mink\Tests\Driver\Js\WindowTest;
 
 class ZombieConfig extends AbstractConfig
 {
@@ -55,6 +59,29 @@ class ZombieConfig extends AbstractConfig
 
         if ('Behat\Mink\Tests\Driver\Js\ChangeEventTest' === $testCase && 'testIssue178' === $test) {
             return 'Zombie does not trigger the keyup event when writing a value in a text input to simulate keyboard';
+        }
+
+        if (IFrameTest::class === $testCase) {
+            return 'iFrame management is not supported.';
+        }
+
+        if (ScreenshotTest::class === $testCase) {
+            return 'Screenshots are not supported.';
+        }
+
+        if (JavascriptTest::class === $testCase && 'testDragDrop' === $test) {
+            return 'Drag & drop is not supported.';
+        }
+
+        if (WindowTest::class === $testCase && \in_array($test, array(
+            'testResizeWindow',
+            'testWindowMaximize',
+        ), true)) {
+            return 'Window resizing is not supported.';
+        }
+
+        if (WindowTest::class === $testCase && 'testGetWindowNames' === $test) {
+            return 'Window names are not supported.';
         }
 
         return parent::skipMessage($testCase, $test);
