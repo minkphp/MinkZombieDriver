@@ -87,6 +87,6 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: logs_php-${{ matrix.php }}
+          name: logs_php-${{ matrix.php }}_zombie${{ matrix.zombie }}_node-${{ matrix.node }}
           path: |
             logs
