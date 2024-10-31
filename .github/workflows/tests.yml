@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
@@ -52,7 +52,7 @@ jobs:
           ini-values: date.timezone=Europe/Paris, error_reporting=-1, display_errors=On
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "${{ matrix.node }}"
 
@@ -78,14 +78,15 @@ jobs:
           vendor/bin/phpunit -v --coverage-clover=coverage.clover
 
       - name: Upload code coverage
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.clover
 
       - name: Archive logs artifacts
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: logs_php-${{ matrix.php }}
+          name: logs_php-${{ matrix.php }}_zombie${{ matrix.zombie }}_node-${{ matrix.node }}
           path: |
             logs
